@@ -1,0 +1,47 @@
+[
+  {
+    "name": "CNH Industrial",
+    "website": "https://www.cnhindustrial.com",
+    "industry": "Agricultural & Construction Equipment",
+    "summary": "Global manufacturer of agricultural and construction equipment, commercial vehicles, and powertrain solutions. Brands include Case IH, New Holland, and CASE Construction.",
+    "embedded_relevance": "high",
+    "research_notes": "Heavy use of embedded controls in sprayers, tractors, and combines. CAN/J1939 is standard across product lines. Active in precision agriculture and autonomous vehicle research.",
+    "source_url": "https://www.cnhindustrial.com/about-us"
+  },
+  {
+    "name": "Deere & Company",
+    "website": "https://www.deere.com",
+    "industry": "Agricultural & Construction Equipment",
+    "summary": "World's largest manufacturer of agricultural equipment. Also produces construction, forestry, and diesel engines.",
+    "embedded_relevance": "high",
+    "research_notes": "Major embedded software employer. Uses CAN/J1939 extensively. Investing heavily in autonomy, precision ag, and edge computing.",
+    "source_url": "https://www.deere.com/en/our-company/"
+  },
+  {
+    "name": "Rockwell Automation",
+    "website": "https://www.rockwellautomation.com",
+    "industry": "Industrial Automation",
+    "summary": "Global leader in industrial automation and digital transformation. Products include PLCs, drives, and industrial IoT platforms.",
+    "embedded_relevance": "high",
+    "research_notes": "Firmware roles for industrial controllers. Uses FreeRTOS, embedded Linux, and industrial Ethernet protocols.",
+    "source_url": "https://www.rockwellautomation.com/about-us"
+  },
+  {
+    "name": "Oshkosh Corporation",
+    "website": "https://www.oshkoshcorp.com",
+    "industry": "Specialty Vehicles",
+    "summary": "Manufacturer of specialty vehicles including fire trucks, military vehicles, and access equipment.",
+    "embedded_relevance": "high",
+    "research_notes": "Vehicle control systems, CAN bus, embedded software for defense and commercial vehicles.",
+    "source_url": "https://www.oshkoshcorp.com/about"
+  },
+  {
+    "name": "Caterpillar",
+    "website": "https://www.caterpillar.com",
+    "industry": "Construction & Mining Equipment",
+    "summary": "World's leading manufacturer of construction and mining equipment, diesel and natural gas engines, and industrial gas turbines.",
+    "embedded_relevance": "high",
+    "research_notes": "Large embedded engineering team. CAN/J1939 for machine control. STM32 and proprietary MCUs. Model-based development with Simulink.",
+    "source_url": "https://www.caterpillar.com/company"
+  }
+]

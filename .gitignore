@@ -1,0 +1,43 @@
+# Byte-compiled / optimized
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution
+dist/
+build/
+*.egg-info/
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Environment
+.env
+
+# Database
+data/app.db
+
+# Logs
+data/*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Generated output files (regenerate locally with: python -m src daily-plan --export dashboard.json)
+dashboard.json
+dashboard_report*.docx
+dashboard_report*.txt
+
+# Word temp/lock files
+~$*.docx
+~$*.doc

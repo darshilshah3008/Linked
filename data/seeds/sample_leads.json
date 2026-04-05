@@ -1,0 +1,66 @@
+[
+  {
+    "title": "Senior Embedded Software Engineer",
+    "company": "Deere & Company",
+    "location": "Moline, IL",
+    "source": "sample_seed",
+    "url": null,
+    "description_snippet": "Design and develop embedded control systems for agricultural equipment. CAN/J1939, RTOS, C/C++ required. Experience with MATLAB/Simulink preferred."
+  },
+  {
+    "title": "Firmware Engineer - Industrial Controls",
+    "company": "Rockwell Automation",
+    "location": "Milwaukee, WI",
+    "source": "sample_seed",
+    "url": null,
+    "description_snippet": "Develop firmware for next-generation industrial automation controllers. SPI, I2C, FreeRTOS experience preferred."
+  },
+  {
+    "title": "Embedded Systems Engineer",
+    "company": "Oshkosh Corporation",
+    "location": "Oshkosh, WI",
+    "source": "sample_seed",
+    "url": null,
+    "description_snippet": "Work on vehicle control systems for specialty vehicles. CAN bus, embedded Linux, C/C++."
+  },
+  {
+    "title": "Controls Software Engineer",
+    "company": "AGCO Corporation",
+    "location": "Hesston, KS",
+    "source": "sample_seed",
+    "url": null,
+    "description_snippet": "Develop control algorithms for agricultural sprayers and tractors. MATLAB/Simulink, J1939, embedded C."
+  },
+  {
+    "title": "Embedded Software Developer",
+    "company": "Parker Hannifin",
+    "location": "Cleveland, OH",
+    "source": "sample_seed",
+    "url": null,
+    "description_snippet": "Firmware development for hydraulic control systems. FreeRTOS, CAN, safety-critical systems."
+  },
+  {
+    "title": "Senior Firmware Engineer",
+    "company": "Honeywell",
+    "location": "Remote, USA",
+    "source": "sample_seed",
+    "url": null,
+    "description_snippet": "IoT edge device firmware development. BLE, embedded Linux, sensor integration, CI/CD pipelines."
+  },
+  {
+    "title": "Embedded Software Engineer II",
+    "company": "Caterpillar",
+    "location": "Peoria, IL",
+    "source": "sample_seed",
+    "url": null,
+    "description_snippet": "Embedded controls for heavy machinery. CAN/J1939, STM32, RTOS, model-based development."
+  },
+  {
+    "title": "Software Engineer - Embedded Systems",
+    "company": "Medtronic",
+    "location": "Minneapolis, MN",
+    "source": "sample_seed",
+    "url": null,
+    "description_snippet": "Medical device embedded software. C/C++, RTOS, safety-critical development, SPI/I2C."
+  }
+]
