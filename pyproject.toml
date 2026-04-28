@@ -23,6 +23,7 @@ dependencies = [
     "httpx>=0.25",
     "rich>=13.0",
     "loguru>=0.7",
+    "python-docx>=1.0",
 ]
 
 [project.optional-dependencies]
