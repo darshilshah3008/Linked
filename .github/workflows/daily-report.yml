@@ -6,10 +6,13 @@ on:
     - cron: "0 13 * * *"
   workflow_dispatch: {}
 
+permissions:
+  contents: write   # needed to commit the updated tracker back to the repo
+
 jobs:
   daily-report:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     env:
       LLM_PROVIDER: openai
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -31,9 +34,9 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install "openai>=1.0"
+          pip install "openai>=1.0" openpyxl
 
-      - name: Seed database (sample target companies + fallback leads)
+      - name: Seed database
         run: python -m src seed
 
       - name: Find leads (live via Serper Google Jobs)
@@ -51,12 +54,27 @@ jobs:
       - name: Generate Word report
         run: python generate_report_docx.py
 
-      - name: Build email body
+      - name: Update application tracker (preserves Status from previous runs)
+        run: python scripts/build_tracker.py dashboard.json
+
+      - name: Build email body (excludes jobs marked Applied)
         run: python scripts/build_email_summary.py dashboard.json > email_body.txt
 
       - name: Set report date
         id: meta
         run: echo "date=$(date -u +'%Y-%m-%d')" >> "$GITHUB_OUTPUT"
+
+      - name: Commit tracker back to repo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add application_tracker.csv application_tracker.xlsx
+          if git diff --staged --quiet; then
+            echo "No tracker changes to commit"
+          else
+            git commit -m "Daily tracker update ${{ steps.meta.outputs.date }}"
+            git push
+          fi
 
       - name: Email the report
         uses: dawidd6/action-send-mail@v3
@@ -70,7 +88,7 @@ jobs:
           to: darshilshah3008@gmail.com
           subject: "Job Search Copilot - Daily Report ${{ steps.meta.outputs.date }}"
           body: file://email_body.txt
-          attachments: dashboard_report.docx,dashboard.json
+          attachments: application_tracker.xlsx,dashboard_report.docx,dashboard.json
 
       - name: Upload artifacts
         if: always()
@@ -78,6 +96,8 @@ jobs:
         with:
           name: daily-report-${{ steps.meta.outputs.date }}
           path: |
+            application_tracker.xlsx
+            application_tracker.csv
             dashboard.json
             dashboard_report.docx
             email_body.txt
