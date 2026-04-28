@@ -1,4 +1,4 @@
-﻿"""Build a plain-text email body summarizing today's dashboard.json."""
+"""Build a plain-text email body summarizing today's dashboard.json."""
 from __future__ import annotations
 import json
 import sys

@@ -1,15 +1,17 @@
-﻿name: Daily Job Search Copilot Report
+name: Daily Job Search Copilot Report
 
 on:
   schedule:
-    # 13:00 UTC daily. Edit the cron to change the time. https://crontab.guru
+    # 13:00 UTC daily = 8:00 AM US Central (CDT) / 9:00 AM Eastern (EDT)
+    # Edit the cron expression to change the time. https://crontab.guru
     - cron: "0 13 * * *"
-  workflow_dispatch: {}
+  workflow_dispatch: {}  # also lets you trigger manually from the Actions tab
 
 jobs:
   daily-report:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -65,7 +67,7 @@ jobs:
           body: file://email_body.txt
           attachments: dashboard_report.docx,dashboard.json
 
-      - name: Upload artifacts
+      - name: Upload artifacts (so you can re-download from the Actions run)
         if: always()
         uses: actions/upload-artifact@v4
         with:
