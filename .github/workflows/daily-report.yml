@@ -1,0 +1,79 @@
+﻿name: Daily Job Search Copilot Report
+
+on:
+  schedule:
+    # 13:00 UTC daily. Edit the cron to change the time. https://crontab.guru
+    - cron: "0 13 * * *"
+  workflow_dispatch: {}
+
+jobs:
+  daily-report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Seed database
+        run: python -m src seed
+
+      - name: Find leads
+        run: python -m src find-leads --limit 30
+
+      - name: Find people
+        run: python -m src find-people || true
+
+      - name: Research companies
+        run: python -m src research-companies || true
+
+      - name: Generate daily plan + JSON export
+        run: python -m src daily-plan --export dashboard.json
+
+      - name: Generate Word report
+        run: python generate_report_docx.py
+
+      - name: Build email body
+        run: python scripts/build_email_summary.py dashboard.json > email_body.txt
+
+      - name: Set report date
+        id: meta
+        run: echo "date=$(date -u +'%Y-%m-%d')" >> "$GITHUB_OUTPUT"
+
+      - name: Email the report
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          from: Job Search Copilot <${{ secrets.MAIL_USERNAME }}>
+          to: darshilshah3008@gmail.com
+          subject: "Job Search Copilot - Daily Report ${{ steps.meta.outputs.date }}"
+          body: file://email_body.txt
+          attachments: dashboard_report.docx,dashboard.json
+
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: daily-report-${{ steps.meta.outputs.date }}
+          path: |
+            dashboard.json
+            dashboard_report.docx
+            email_body.txt
+            data/copilot.log
+          if-no-files-found: warn
+          retention-days: 14
