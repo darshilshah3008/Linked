@@ -9,6 +9,8 @@ Currently provides:
 
 from __future__ import annotations
 
+import os
+
 from abc import ABC, abstractmethod
 
 from src.schemas.lead import LeadInput
@@ -661,20 +663,91 @@ class RSSJobSourceAdapter(LeadSource):
         return []
 
 
+
+
+class SerperJobSearchAdapter(LeadSource):
+    """Live job search via Serper.dev's Google Jobs API.
+
+    Requires the SERPER_API_KEY environment variable. Returns real, current
+    job postings discovered via Google Jobs across LinkedIn, Indeed,
+    company sites, and other major boards.
+    """
+
+    @property
+    def source_name(self) -> str:
+        return "serper_google_jobs"
+
+    def fetch_leads(self, keywords: list[str], location: str | None = None) -> list[LeadInput]:
+        api_key = os.getenv("SERPER_API_KEY")
+        if not api_key:
+            return []
+
+        max_queries = int(os.getenv("SERPER_MAX_QUERIES", "4"))
+        results_per_query = int(os.getenv("SERPER_RESULTS_PER_QUERY", "10"))
+        gl = os.getenv("SERPER_COUNTRY", "us")
+
+        loc_for_query = (location or "").strip() or "United States"
+        queries: list[str] = []
+        for kw in keywords[:max_queries]:
+            queries.append(f"{kw} {loc_for_query}".strip())
+
+        leads: list[LeadInput] = []
+        seen: set[tuple[str, str]] = set()
+
+        for q in queries[:max_queries]:
+            try:
+                response = httpx.post(
+                    "https://google.serper.dev/jobs",
+                    headers={"X-API-KEY": api_key, "Content-Type": "application/json"},
+                    json={"q": q, "gl": gl},
+                    timeout=20.0,
+                )
+                response.raise_for_status()
+                data = response.json()
+            except Exception as e:
+                print(f"[SerperJobSearchAdapter] query '{q}' failed: {e}", flush=True)
+                continue
+
+            for job in (data.get("jobs") or [])[:results_per_query]:
+                title = (job.get("title") or "").strip()
+                company = (job.get("company_name") or "").strip()
+                if not title or not company:
+                    continue
+                key = (title.lower(), company.lower())
+                if key in seen:
+                    continue
+                seen.add(key)
+
+                job_loc = (job.get("location") or "").strip() or None
+                link = (
+                    job.get("link")
+                    or job.get("share_link")
+                    or job.get("apply_link")
+                    or None
+                )
+                desc_full = job.get("description") or ""
+                desc = desc_full[:500] if desc_full else None
+
+                leads.append(
+                    LeadInput(
+                        title=title,
+                        company=company,
+                        location=job_loc,
+                        source="serper_google_jobs",
+                        url=link,
+                        description_snippet=desc,
+                    )
+                )
+
+        return leads
+
+
 def get_lead_sources() -> list[LeadSource]:
     """Return configured lead sources.
 
-    Currently returns MockLeadSource.
-    Add PublicCareersPageAdapter or RSSJobSourceAdapter instances here
-    when real integrations are ready.
+    If SERPER_API_KEY is set, uses the live Serper Google Jobs adapter.
+    Otherwise falls back to MockLeadSource so the project still runs end-to-end.
     """
-    sources: list[LeadSource] = [MockLeadSource()]
-
-    # TODO: Uncomment when ready to scrape real career pages:
-    # sources.append(PublicCareersPageAdapter("Deere", "https://www.deere.com/en/our-company/john-deere-careers/"))
-    # sources.append(PublicCareersPageAdapter("Caterpillar", "https://www.caterpillar.com/en/careers.html"))
-
-    # TODO: Uncomment when RSS feeds are identified:
-    # sources.append(RSSJobSourceAdapter("https://example.com/jobs.rss", "example_board"))
-
-    return sources
+    if os.getenv("SERPER_API_KEY"):
+        return [SerperJobSearchAdapter()]
+    return [MockLeadSource()]
