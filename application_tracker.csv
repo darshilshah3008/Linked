@@ -1,52 +1,60 @@
-Company,Role,Fit Score,Priority,Apply URL,Contact Person,Contact Role,Outreach Type,Status,Notes
-Honeywell,Senior Firmware Engineer,100,HIGH,https://careers.honeywell.com/jobs?keywords=embedded,,,,Not Applied,Title directly matches profile: firmware; Industry aligns with background: iot
-Siemens,Controls Engineer - Precision Agriculture,94,HIGH,https://jobs.siemens.com/,[Siemens Automation Recruiter],Technical Recruiter - Industrial Automation,recruiter intro,Not Applied,"Title directly matches profile: controls engineer; Industry aligns with background: agriculture, industrial, controls"
-Deere & Company,Senior Embedded Software Engineer,93,HIGH,https://jobs.deere.com/search-jobs?keywords=embedded,[Deere Embedded Hiring Manager],Embedded Software Manager,hiring manager intro,Not Applied,Title directly matches profile: embedded software; Industry aligns with background: agricultural
-Caterpillar,Embedded Software Engineer II,93,HIGH,https://www.caterpillar.com/en/careers.html,[CAT Controls Engineering Manager],Controls Engineering Manager,hiring manager intro,Not Applied,"Title directly matches profile: embedded software; Industry aligns with background: machinery, controls"
-CNH Industrial,Senior Embedded Controls Engineer,93,HIGH,https://careers.cnhindustrial.com/,[CNH Embedded Engineering Lead],Embedded Engineering Lead - Sprayers,hiring manager intro,Not Applied,"Title directly matches profile: controls engineer; Industry aligns with background: agricultural, industrial, controls"
-Cummins,Senior Embedded Software Engineer - Powertrain,93,HIGH,https://jobs.cummins.com/search-jobs?keywords=embedded,[Cummins Controls Manager],Embedded Controls Engineering Manager,hiring manager intro,Not Applied,Title directly matches profile: embedded software; Industry aligns with background: controls
-Rockwell Automation,Firmware Engineer - Industrial Controls,87,HIGH,https://www.rockwellautomation.com/en-us/company/careers.html,[Rockwell Firmware Manager],Firmware Engineering Manager,hiring manager intro,Not Applied,"Title directly matches profile: firmware; Industry aligns with background: industrial, controls, automation"
-Oshkosh Corporation,Embedded Systems Engineer,87,HIGH,https://oshkoshcorporation.jobs/,,,,Not Applied,Title directly matches profile: embedded systems; Industry aligns with background: vehicle
-Bosch,Embedded Software Engineer - Automotive,87,HIGH,https://www.bosch.us/careers/search/?keywords=embedded,[Bosch Firmware Team Lead],Firmware Team Lead - Powertrain,hiring manager intro,Not Applied,Title directly matches profile: embedded software; Industry aligns with background: automotive
-Continental,Firmware Developer - Vehicle Electronics,87,HIGH,https://jobs-continental.icims.com/jobs/search?searchKeyword=embedded,[Continental ECU Engineering Manager],ECU Software Engineering Manager,hiring manager intro,Not Applied,Title directly matches profile: firmware; Industry aligns with background: vehicle
-Infineon,Firmware Engineer - Automotive MCU,87,HIGH,https://infineon.wd3.myworkdayjobs.com/infineonexternal?keywords=embedded,[Infineon Automotive FW Lead],Automotive Firmware Team Lead,hiring manager intro,Not Applied,Title directly matches profile: firmware; Industry aligns with background: automotive
-Ford Motor Company,Embedded Controls Engineer - Electric Vehicle,87,HIGH,https://corporate.ford.com/careers/all-jobs.html?keywords=embedded,[Ford EV Controls Manager],EV Powertrain Controls Manager,hiring manager intro,Not Applied,"Title directly matches profile: controls engineer; Industry aligns with background: controls, vehicle"
-General Motors,Embedded Software Engineer - Autonomous Vehicles,87,HIGH,https://search-careers.gm.com/search-jobs?keywords=embedded,[GM Embedded SW Manager],Embedded Software Engineering Manager,hiring manager intro,Not Applied,Title directly matches profile: embedded software; Industry aligns with background: vehicle
-Magna International,Embedded Firmware Engineer - Vehicle Controls,87,HIGH,https://careers.magna.com/search?keywords=embedded,[Magna ECU FW Lead],ECU Firmware Team Lead,hiring manager intro,Not Applied,"Title directly matches profile: firmware; Industry aligns with background: controls, vehicle"
-Tesla,Firmware Engineer - Autonomous Driving,87,HIGH,https://www.tesla.com/careers/search?keywords=embedded,[Tesla Firmware Recruiter],Technical Recruiter - Firmware,recruiter intro,Not Applied,Title directly matches profile: firmware; Industry aligns with background: vehicle
-ZF Group,Embedded Software Engineer - Transmission,87,HIGH,https://jobs.zf.com/search-jobs?keywords=embedded,[ZF Embedded SW Manager],Embedded Software Manager - Transmission,hiring manager intro,Not Applied,Title directly matches profile: embedded software; Industry aligns with background: controls
-Northrop Grumman,Embedded Software Engineer - Defense,87,HIGH,https://www.northropgrumman.com/careers/job-search?searchTerm=embedded,[NG Embedded SW Manager],Embedded Systems Engineering Manager,hiring manager intro,Not Applied,Title directly matches profile: embedded software; Industry aligns with background: defense
-GE Aerospace,Embedded Firmware Engineer - Aviation,87,HIGH,https://jobs.gecareers.com/jobs?keywords=embedded,[GE FADEC SW Manager],FADEC Software Manager,hiring manager intro,Not Applied,"Title directly matches profile: firmware; Industry aligns with background: controls, aerospace"
-Boston Dynamics,Embedded Software Engineer - Robotics,87,HIGH,https://jobs.smartrecruiters.com/BostonDynamics?keywords=embedded,[BD Embedded Robotics Lead],Embedded Software Lead - Robotics,hiring manager intro,Not Applied,Title directly matches profile: embedded software; Industry aligns with background: robotics
-Panasonic,Embedded Software Engineer - Display,87,HIGH,https://na.panasonic.com/us/jobs?keywords=embedded,,,,Not Applied,Title directly matches profile: embedded software; Industry aligns with background: industrial
-Hitachi,Embedded Software Engineer - Industrial,87,HIGH,https://www.hitachi.com/careers/search?keyword=embedded,,,,Not Applied,"Title directly matches profile: embedded software; Industry aligns with background: industrial, iot"
-ABB,Embedded Software Engineer - Power,87,HIGH,https://careers.abb/global/en/search-results?keywords=embedded,[ABB Robotics FW Manager],Firmware Engineering Manager - Robotics,hiring manager intro,Not Applied,"Title directly matches profile: embedded software; Industry aligns with background: industrial, robotics"
-Synaptics,Embedded Platform Engineer,70,MEDIUM,https://careers.synaptics.com/jobs?keywords=embedded,,,,Not Applied,Description mentions relevant terms: firmware; Industry aligns with background: iot
-Parker Hannifin,Embedded Software Developer,67,MEDIUM,https://www.parker.com/careers,,,,Not Applied,"Title directly matches profile: embedded software; Tech stack overlap: can, freertos"
-Medtronic,Software Engineer - Embedded Systems,67,MEDIUM,https://jobs.medtronic.com/,,,,Not Applied,"Title directly matches profile: embedded systems; Tech stack overlap: spi, i2c, c++"
-Qualcomm,Embedded Firmware Engineer,67,MEDIUM,https://jobs.qualcomm.com/search-jobs?keywords=embedded,[Qualcomm Firmware Manager],Firmware Engineering Manager,hiring manager intro,Not Applied,Title directly matches profile: firmware; Tech stack overlap: c++
-Intel,Firmware Engineer - SoC Bring-up,67,MEDIUM,https://jobs.intel.com/Search/Results?keyword=embedded,[Intel Firmware Manager],Firmware Engineering Manager,hiring manager intro,Not Applied,Title directly matches profile: firmware; Tech stack overlap: c++
-Texas Instruments,Embedded Software Engineer - MCU,67,MEDIUM,https://careers.ti.com/jobs?keywords=embedded,[TI Embedded SW Manager],Embedded Software Manager - MCU SDK,hiring manager intro,Not Applied,"Title directly matches profile: embedded software; Tech stack overlap: can, spi, i2c, c++"
-Analog Devices,Embedded Software Engineer - Sensors,67,MEDIUM,https://www.analog.com/en/about-adi/careers?keywords=embedded,[ADI Firmware Engineer],Senior Firmware Engineer,connection,Not Applied,"Title directly matches profile: embedded software; Tech stack overlap: spi, i2c"
-Micron Technology,Embedded Software Engineer - Storage,67,MEDIUM,https://jobs.micron.com/search?keyword=embedded,,,,Not Applied,"Title directly matches profile: embedded software; Tech stack overlap: embedded c, c++"
-Western Digital,Firmware Engineer - SSD Controller,67,MEDIUM,https://jobs.westerndigital.com/search-jobs?keywords=embedded,,,,Not Applied,Title directly matches profile: firmware; Tech stack overlap: c++
-Seagate Technology,Firmware Engineer - HDD,67,MEDIUM,https://jobs.seagate.com/search-jobs?keywords=embedded,,,,Not Applied,Title directly matches profile: firmware; Tech stack overlap: embedded c
-Synopsys,Embedded Software Engineer - EDA,67,MEDIUM,https://www.synopsys.com/company/careers/search?keyword=embedded,,,,Not Applied,Title directly matches profile: embedded software; Tech stack overlap: c++
-Samsung Semiconductor,Embedded Software Engineer - SoC,67,MEDIUM,https://semiconductor.samsung.com/us/careers/search?keyword=embedded,[Samsung SoC FW Manager],SoC Firmware Engineering Manager,hiring manager intro,Not Applied,Title directly matches profile: embedded software; Tech stack overlap: c++
-ARM,Embedded Software Engineer - Processor IP,67,MEDIUM,https://arm.wd1.myworkdayjobs.com/ARM_Careers/jobs?keywords=embedded,[ARM Embedded SW Lead],Embedded Software Lead - Processor Validation,hiring manager intro,Not Applied,Title directly matches profile: embedded software; Tech stack overlap: c++
-Aptiv,Embedded Software Engineer - ADAS,67,MEDIUM,https://aptiv.avature.net/careers?keyword=embedded,[Aptiv ADAS FW Manager],ADAS Firmware Engineering Manager,hiring manager intro,Not Applied,"Title directly matches profile: embedded software; Tech stack overlap: can, c++, ethernet"
-Lucid Motors,Embedded Software Engineer - EV Drivetrain,67,MEDIUM,https://lucidgroup.icims.com/jobs/search?searchKeyword=embedded,[Lucid Drivetrain FW Lead],Drivetrain Firmware Lead,hiring manager intro,Not Applied,"Title directly matches profile: embedded software; Tech stack overlap: can, embedded c, c++"
-Boeing,Embedded Software Engineer - Avionics,67,MEDIUM,https://jobs.boeing.com/search-jobs?keywords=embedded,[Boeing Avionics FW Manager],Avionics Software Manager,hiring manager intro,Not Applied,Title directly matches profile: embedded software; Tech stack overlap: c++
-Lockheed Martin,Embedded Software Engineer - Mission Systems,67,MEDIUM,https://jobs.lockheedmartin.com/search-jobs?keywords=embedded,[LM Embedded SW Lead],Embedded Software Engineering Lead,hiring manager intro,Not Applied,Title directly matches profile: embedded software; Tech stack overlap: c++
-Raytheon Technologies,Embedded Software Engineer - Radar,67,MEDIUM,https://www.rtx.com/careers/job-search?keywords=embedded,[RTX Firmware Manager],Firmware Engineering Manager - Radar,hiring manager intro,Not Applied,Title directly matches profile: embedded software; Tech stack overlap: c++
-iRobot,Embedded Software Engineer - Robot Firmware,67,MEDIUM,https://irobot.taleo.net/careersection/2/jobsearch.ftl?keyword=embedded,,,,Not Applied,"Title directly matches profile: embedded software, firmware; Tech stack overlap: freertos, ble"
-DJI,Firmware Engineer - Drone Systems,67,MEDIUM,https://careers-dji.icims.com/jobs/search?searchKeyword=embedded,[DJI Flight Controller FW Lead],Flight Controller Firmware Lead,hiring manager intro,Not Applied,Title directly matches profile: firmware; Tech stack overlap: c++
-Sony,Embedded Software Engineer - Imaging,67,MEDIUM,https://careers.sony.net/job-search?keywords=embedded,,,,Not Applied,"Title directly matches profile: embedded software; Tech stack overlap: spi, c++"
-Ericsson,Embedded Software Engineer - Telecom,67,MEDIUM,https://jobs.ericsson.com/ShowJob/?jldocid=Embedded,,,,Not Applied,Title directly matches profile: embedded software; Tech stack overlap: c++
-Arista Networks,Embedded Software Engineer - Networking,67,MEDIUM,https://www.arista.com/en/company/careers?keywords=embedded,[Arista EOS FW Lead],EOS Platform Engineering Lead,hiring manager intro,Not Applied,Title directly matches profile: embedded software; Tech stack overlap: c++
-Google,Embedded Software Engineer - Devices,67,MEDIUM,https://careers.google.com/jobs/results/?q=embedded&location=United%20States,[Google HW FW Manager],Firmware Engineering Manager - Hardware,hiring manager intro,Not Applied,"Title directly matches profile: embedded software; Tech stack overlap: i2c, c++"
-Meta,Firmware Engineer - AR/VR Hardware,67,MEDIUM,https://www.metacareers.com/jobs?keywords=embedded,[Meta AR/VR FW Manager],Firmware Engineering Manager - Reality Labs,hiring manager intro,Not Applied,"Title directly matches profile: firmware; Tech stack overlap: c++, ble"
-Microsoft,Firmware Engineer - Surface Devices,67,MEDIUM,https://careers.microsoft.com/us/en/search-results?keywords=embedded,,,,Not Applied,"Title directly matches profile: firmware; Tech stack overlap: embedded c, c++"
-Amazon,Embedded Software Engineer - Devices,67,MEDIUM,https://www.amazon.jobs/en/search?keywords=embedded+firmware&location=United%20States,[Amazon Devices FW Recruiter],Technical Recruiter - Device Firmware,recruiter intro,Not Applied,"Title directly matches profile: embedded software; Tech stack overlap: c++, ble"
-Electronic Arts,Embedded Software Engineer - Engines,67,MEDIUM,https://jobs.ea.com/jobs?keywords=embedded,,,,Not Applied,Title directly matches profile: embedded software; Tech stack overlap: c++
-Lumen Technologies,Firmware Engineer - Telecom Infrastructure,67,MEDIUM,https://jobs.lumen.com/jobs?keywords=embedded,,,,Not Applied,Title directly matches profile: firmware; Tech stack overlap: c++
+Title,Company,Location,H1B Sponsor?,Apply Link,Score,Confidence,Status,Applied Date,Notes,First Seen
+Senior Firmware Engineer,Honeywell,"Remote, USA",Yes,,100.0,high,New,,,2026-04-29
+Senior Embedded Software Engineer,Deere & Company,"Moline, IL",Yes,,93.0,high,New,,,2026-04-29
+Embedded Software Engineer II,Caterpillar,"Peoria, IL",No,,93.0,high,New,,,2026-04-29
+Firmware Engineer - Industrial Controls,Rockwell Automation,"Milwaukee, WI",Yes,,87.0,high,New,,,2026-04-29
+Embedded Systems Engineer,Oshkosh Corporation,"Oshkosh, WI",No,,87.0,high,New,,,2026-04-29
+Embedded Software Developer,Parker Hannifin,"Cleveland, OH",No,,67.0,medium,New,,,2026-04-29
+Software Engineer - Embedded Systems,Medtronic,"Minneapolis, MN",Yes,,67.0,medium,New,,,2026-04-29
+Controls Software Engineer,AGCO Corporation,"Hesston, KS",Yes,,52.0,medium,New,,,2026-04-29
+,Honeywell,,,,,,Not Applied,,Title directly matches profile: firmware; Industry aligns with background: iot,
+,Siemens,,,,,,Not Applied,,"Title directly matches profile: controls engineer; Industry aligns with background: agriculture, industrial, controls",
+,Deere & Company,,,,,,Not Applied,,Title directly matches profile: embedded software; Industry aligns with background: agricultural,
+,Caterpillar,,,,,,Not Applied,,"Title directly matches profile: embedded software; Industry aligns with background: machinery, controls",
+,CNH Industrial,,,,,,Not Applied,,"Title directly matches profile: controls engineer; Industry aligns with background: agricultural, industrial, controls",
+,Cummins,,,,,,Not Applied,,Title directly matches profile: embedded software; Industry aligns with background: controls,
+,Rockwell Automation,,,,,,Not Applied,,"Title directly matches profile: firmware; Industry aligns with background: industrial, controls, automation",
+,Oshkosh Corporation,,,,,,Not Applied,,Title directly matches profile: embedded systems; Industry aligns with background: vehicle,
+,Bosch,,,,,,Not Applied,,Title directly matches profile: embedded software; Industry aligns with background: automotive,
+,Continental,,,,,,Not Applied,,Title directly matches profile: firmware; Industry aligns with background: vehicle,
+,Infineon,,,,,,Not Applied,,Title directly matches profile: firmware; Industry aligns with background: automotive,
+,Ford Motor Company,,,,,,Not Applied,,"Title directly matches profile: controls engineer; Industry aligns with background: controls, vehicle",
+,General Motors,,,,,,Not Applied,,Title directly matches profile: embedded software; Industry aligns with background: vehicle,
+,Magna International,,,,,,Not Applied,,"Title directly matches profile: firmware; Industry aligns with background: controls, vehicle",
+,Tesla,,,,,,Not Applied,,Title directly matches profile: firmware; Industry aligns with background: vehicle,
+,ZF Group,,,,,,Not Applied,,Title directly matches profile: embedded software; Industry aligns with background: controls,
+,Northrop Grumman,,,,,,Not Applied,,Title directly matches profile: embedded software; Industry aligns with background: defense,
+,GE Aerospace,,,,,,Not Applied,,"Title directly matches profile: firmware; Industry aligns with background: controls, aerospace",
+,Boston Dynamics,,,,,,Not Applied,,Title directly matches profile: embedded software; Industry aligns with background: robotics,
+,Panasonic,,,,,,Not Applied,,Title directly matches profile: embedded software; Industry aligns with background: industrial,
+,Hitachi,,,,,,Not Applied,,"Title directly matches profile: embedded software; Industry aligns with background: industrial, iot",
+,ABB,,,,,,Not Applied,,"Title directly matches profile: embedded software; Industry aligns with background: industrial, robotics",
+,Synaptics,,,,,,Not Applied,,Description mentions relevant terms: firmware; Industry aligns with background: iot,
+,Parker Hannifin,,,,,,Not Applied,,"Title directly matches profile: embedded software; Tech stack overlap: can, freertos",
+,Medtronic,,,,,,Not Applied,,"Title directly matches profile: embedded systems; Tech stack overlap: spi, i2c, c++",
+,Qualcomm,,,,,,Not Applied,,Title directly matches profile: firmware; Tech stack overlap: c++,
+,Intel,,,,,,Not Applied,,Title directly matches profile: firmware; Tech stack overlap: c++,
+,Texas Instruments,,,,,,Not Applied,,"Title directly matches profile: embedded software; Tech stack overlap: can, spi, i2c, c++",
+,Analog Devices,,,,,,Not Applied,,"Title directly matches profile: embedded software; Tech stack overlap: spi, i2c",
+,Micron Technology,,,,,,Not Applied,,"Title directly matches profile: embedded software; Tech stack overlap: embedded c, c++",
+,Western Digital,,,,,,Not Applied,,Title directly matches profile: firmware; Tech stack overlap: c++,
+,Seagate Technology,,,,,,Not Applied,,Title directly matches profile: firmware; Tech stack overlap: embedded c,
+,Synopsys,,,,,,Not Applied,,Title directly matches profile: embedded software; Tech stack overlap: c++,
+,Samsung Semiconductor,,,,,,Not Applied,,Title directly matches profile: embedded software; Tech stack overlap: c++,
+,ARM,,,,,,Not Applied,,Title directly matches profile: embedded software; Tech stack overlap: c++,
+,Aptiv,,,,,,Not Applied,,"Title directly matches profile: embedded software; Tech stack overlap: can, c++, ethernet",
+,Lucid Motors,,,,,,Not Applied,,"Title directly matches profile: embedded software; Tech stack overlap: can, embedded c, c++",
+,Boeing,,,,,,Not Applied,,Title directly matches profile: embedded software; Tech stack overlap: c++,
+,Lockheed Martin,,,,,,Not Applied,,Title directly matches profile: embedded software; Tech stack overlap: c++,
+,Raytheon Technologies,,,,,,Not Applied,,Title directly matches profile: embedded software; Tech stack overlap: c++,
+,iRobot,,,,,,Not Applied,,"Title directly matches profile: embedded software, firmware; Tech stack overlap: freertos, ble",
+,DJI,,,,,,Not Applied,,Title directly matches profile: firmware; Tech stack overlap: c++,
+,Sony,,,,,,Not Applied,,"Title directly matches profile: embedded software; Tech stack overlap: spi, c++",
+,Ericsson,,,,,,Not Applied,,Title directly matches profile: embedded software; Tech stack overlap: c++,
+,Arista Networks,,,,,,Not Applied,,Title directly matches profile: embedded software; Tech stack overlap: c++,
+,Google,,,,,,Not Applied,,"Title directly matches profile: embedded software; Tech stack overlap: i2c, c++",
+,Meta,,,,,,Not Applied,,"Title directly matches profile: firmware; Tech stack overlap: c++, ble",
+,Microsoft,,,,,,Not Applied,,"Title directly matches profile: firmware; Tech stack overlap: embedded c, c++",
+,Amazon,,,,,,Not Applied,,"Title directly matches profile: embedded software; Tech stack overlap: c++, ble",
+,Electronic Arts,,,,,,Not Applied,,Title directly matches profile: embedded software; Tech stack overlap: c++,
+,Lumen Technologies,,,,,,Not Applied,,Title directly matches profile: firmware; Tech stack overlap: c++,
