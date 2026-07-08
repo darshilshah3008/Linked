@@ -117,7 +117,26 @@ ACCENTS = {
 
 
 # ---------- LinkedIn post ----------------------------------------------------
-def generate_post(client, pillar):
+def find_trend(client, pillar):
+    """Best-effort: one recent development to anchor the post. Never raises."""
+    try:
+        msg = client.messages.create(
+            model=MODEL, max_tokens=700,
+            tools=[{"type": "web_search_20250305", "name": "web_search", "max_uses": 4}],
+            messages=[{"role": "user", "content": (
+                "Search the web for ONE genuinely recent (last ~2 weeks) real "
+                f"development relevant to: {pillar}\n\n"
+                "Reply with 2-3 plain sentences: what it is and why it matters. "
+                "No preamble, no markdown."
+            )}],
+        )
+        return "".join(b.text for b in msg.content
+                       if getattr(b, "type", None) == "text").strip()
+    except Exception:  # noqa: BLE001
+        return ""
+
+
+def generate_post(client, pillar, trend=""):
     system = (
         "You write LinkedIn posts AS Darshil Shah, a real embedded software "
         "engineer. You are not a marketer. Every post must sound like one "
@@ -149,20 +168,20 @@ def generate_post(client, pillar):
         "STYLE REFERENCE — match the voice, rhythm, and structure of these real "
         "posts by Darshil:\n\n" + STYLE_SAMPLES + "\n"
     )
+    hook_note = (
+        "A recent, real development you MAY use as a timely hook — only if it "
+        f"fits naturally with his experience:\n{trend}\n\n"
+    ) if trend else ""
     user = f"""Write ONE LinkedIn post for today. Angle for today: {pillar}
 
-STEP 1: Use web search to find ONE recent, real development (ideally the last
-1-2 weeks) relevant to today's angle in firmware, embedded software, or LLMs —
-a release, a tool, a benchmark, a technique, a debate. Verify it's real and recent.
-
-STEP 2: Write the post as Darshil's OWN take on it — his angle, opinion, or a
-lesson from his experience that connects to it. It is NOT a news summary; the
-development is just the hook that makes it timely. His voice and insight lead.
+{hook_note}Write the post as Darshil's OWN take, grounded in his real experience.
+If the development above fits, hook onto it; otherwise write from his own work.
+It is NOT a news summary.
 
 Caption requirements:
 - Length 80-160 words. Tight. Cut every word that isn't earning its place.
 - First line is a real hook: specific, conversational, sentence case.
-- Short paragraphs / line breaks so it's easy to scan.
+- Short paragraphs / line breaks; use → for lists like he does.
 - Ground it in his real work (firmware, RTOS, CAN/J1939, on-device LLMs/edge AI,
   his side projects). One genuine takeaway.
 - End with a real question that invites a reply.
@@ -171,15 +190,15 @@ Caption requirements:
 Respond with ONLY valid JSON (no fences, no markdown):
 {{"kicker":"SHORT UPPERCASE LABEL for the poster, sharing-oriented e.g. FIELD NOTES, EDGE AI, BUILD LOG (never job/hiring words)","poster_headline":"5-9 word distillation of the hook, in SENTENCE CASE (only first word + proper nouns capitalized)","poster_subtitle":"one short supporting line, under 8 words, sentence case","caption":"the full post text exactly as it should be pasted"}}"""
     msg = client.messages.create(
-        model=MODEL, max_tokens=2000, system=system,
-        tools=[{"type": "web_search_20250305", "name": "web_search", "max_uses": 4}],
+        model=MODEL, max_tokens=1600, system=system,
         messages=[{"role": "user", "content": user}],
     )
     raw = "".join(b.text for b in msg.content if b.type == "text").strip()
-    # Extract the JSON object even if the model emitted search commentary around it.
     match = re.search(r"\{.*\}", raw, re.DOTALL)
     if match:
         raw = match.group(0)
+    if not raw:
+        raise RuntimeError("Model returned no JSON for the post.")
     return json.loads(raw)
 
 
@@ -321,7 +340,8 @@ def main():
     weekday = datetime.date.today().weekday()
     pillar, accent = PILLARS[weekday], ACCENTS[weekday]
 
-    post = generate_post(client, pillar)
+    trend = find_trend(client, pillar)
+    post = generate_post(client, pillar, trend)
     kicker = post.get("kicker", "FIELD NOTES")
     headline = post.get("poster_headline") or post["caption"].split("\n")[0]
     subtitle = post.get("poster_subtitle", "")
@@ -332,6 +352,8 @@ def main():
         news_html = generate_news(client)
     except Exception as e:  # noqa: BLE001
         news_html = f"<p>(AI news digest unavailable today: {e})</p>"
+    if not news_html.strip():
+        news_html = "<p>(No fresh AI news was pulled this run.)</p>"
 
     date_str = datetime.date.today().isoformat()
     poster = render_poster(headline, kicker, subtitle, accent, f"poster-{date_str}.png")
