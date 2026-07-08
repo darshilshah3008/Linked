@@ -151,6 +151,21 @@ def find_trend(client, pillar):
         return ""
 
 
+def _parse_fields(raw):
+    """Parse labelled post output. Robust to multi-line captions (no JSON)."""
+    def line(label, default=""):
+        m = re.search(rf"^{label}:\s*(.+)$", raw, re.MULTILINE)
+        return m.group(1).strip() if m else default
+    cap = re.search(r"CAPTION:\s*(.*)$", raw, re.DOTALL | re.MULTILINE)
+    caption = cap.group(1).strip() if cap else raw.strip()
+    return {
+        "kicker": line("KICKER", "BUILD LOG"),
+        "poster_headline": line("HEADLINE"),
+        "poster_subtitle": line("SUBTITLE"),
+        "caption": caption,
+    }
+
+
 def generate_post(client, pillar, trend=""):
     system = (
         "You write LinkedIn posts AS Darshil Shah, a real embedded software "
@@ -212,19 +227,22 @@ Caption requirements:
 - End with a real question.
 - 3-4 hashtags on the last line.
 
-Respond with ONLY valid JSON (no fences, no markdown):
-{{"kicker":"SHORT UPPERCASE LABEL, sharing-oriented e.g. FIELD NOTES, EDGE AI, BUILD LOG (never job/hiring words)","poster_headline":"concrete 5-9 word distillation in SENTENCE CASE; NOT a 'why X needs Y' phrasing","poster_subtitle":"one short concrete supporting line, under 8 words, sentence case","caption":"the full post text exactly as it should be pasted"}}"""
+Return EXACTLY this format and nothing else — no JSON, no markdown, no fences.
+Use these four labels on their own lines:
+
+KICKER: a short uppercase label, sharing-oriented (e.g. FIELD NOTES, EDGE AI, BUILD LOG) — never job/hiring words
+HEADLINE: a concrete 5-9 word distillation in sentence case; NOT a "why X needs Y" phrasing
+SUBTITLE: one short concrete supporting line, under 8 words, sentence case
+CAPTION:
+<the full post text exactly as it should be pasted; multiple lines are fine>"""
     msg = client.messages.create(
-        model=MODEL, max_tokens=1600, system=system,
+        model=MODEL, max_tokens=1800, system=system,
         messages=[{"role": "user", "content": user}],
     )
     raw = "".join(b.text for b in msg.content if b.type == "text").strip()
-    match = re.search(r"\{.*\}", raw, re.DOTALL)
-    if match:
-        raw = match.group(0)
     if not raw:
-        raise RuntimeError("Model returned no JSON for the post.")
-    return json.loads(raw)
+        raise RuntimeError("Model returned no text for the post.")
+    return _parse_fields(raw)
 
 
 # ---------- AI news digest ---------------------------------------------------
