@@ -67,17 +67,41 @@ ACCENTS = {
 
 # ---------- LinkedIn post ----------------------------------------------------
 def generate_post(client, pillar):
-    system = ("You are Darshil's expert LinkedIn ghostwriter. Authentic, "
-              "practical, no-hype posts grounded ONLY in his real background. "
-              "Never invent metrics.\n\n" + PROFILE)
-    user = f"""Write ONE LinkedIn post for today. Pillar: {pillar}
+    system = (
+        "You write LinkedIn posts AS Darshil Shah, a real embedded software "
+        "engineer. You are not a marketer. Every post must sound like one "
+        "specific human talking, grounded ONLY in his real background below. "
+        "Never invent metrics or achievements.\n\n" + PROFILE + "\n\n"
+        "VOICE (blend of two things every post):\n"
+        "1) Personal & specific: open with a real moment, observation, or a "
+        "concrete thing he did/noticed — not a generic thesis.\n"
+        "2) Practical: land on ONE useful, concrete takeaway another engineer "
+        "can actually apply.\n\n"
+        "HARD RULES:\n"
+        "- Sentence case everywhere. NEVER Title Case. (Write 'I automated my "
+        "job search' — never 'I Automated My Job Search'.)\n"
+        "- No emoji. None.\n"
+        "- Banned phrases: 'I'm humbled', 'excited to share', 'game-changer', "
+        "'in today's fast-paced world', 'the power of', 'thrilled', 'delve', "
+        "'dive in', 'unlock', 'leverage', 'game changer'. Avoid anything that "
+        "smells AI-generated.\n"
+        "- Short sentences. Concrete nouns. Specific details over buzzwords.\n"
+        "- No hype, no humble-brag. Confident but plain-spoken.\n"
+    )
+    user = f"""Write ONE LinkedIn post for today. Angle for today: {pillar}
 
-Caption rules: strong 1-line hook; 120-220 words; short scannable paragraphs;
-teach something concrete; end with an engagement question; 3-5 hashtags on the
-last line; humble-confident tone.
+Caption requirements:
+- Length 80-160 words. Tight. Cut every word that isn't earning its place.
+- First line is a real hook: a specific, conversational sentence that makes a
+  scrolling engineer stop. Not a headline, not clickbait. Sentence case.
+- Short paragraphs / line breaks so it's easy to scan.
+- Ground it in something concrete from his real work (firmware, RTOS, CAN/J1939,
+  edge AI on Jetson/Orin, his side projects). One genuine takeaway.
+- End with a real question that invites a reply.
+- 3-4 relevant hashtags on the last line.
 
-Respond with ONLY valid JSON (no fences):
-{{"kicker":"SHORT UPPERCASE LABEL","poster_headline":"6-10 word hook","caption":"full post text"}}"""
+Respond with ONLY valid JSON (no fences, no markdown):
+{{"kicker":"SHORT UPPERCASE LABEL e.g. EDGE AI","poster_headline":"5-9 word distillation of the hook, in SENTENCE CASE (only first word + proper nouns capitalized)","caption":"the full post text exactly as it should be pasted"}}"""
     msg = client.messages.create(
         model=MODEL, max_tokens=1500, system=system,
         messages=[{"role": "user", "content": user}],
@@ -85,7 +109,6 @@ Respond with ONLY valid JSON (no fences):
     raw = "".join(b.text for b in msg.content if b.type == "text").strip()
     raw = re.sub(r"^```(?:json)?|```$", "", raw.strip(), flags=re.MULTILINE).strip()
     return json.loads(raw)
-
 
 # ---------- AI news digest ---------------------------------------------------
 def generate_news(client):
