@@ -24,6 +24,7 @@ import os
 import re
 import json
 import ssl
+import random
 import smtplib
 import datetime
 from email.message import EmailMessage
@@ -115,6 +116,20 @@ ACCENTS = {
     4: "#4FC3E8", 5: "#7BD88F", 6: "#C78BFF",
 }
 
+# Rotating post STRUCTURES so posts don't all follow one formula.
+FORMATS = [
+    "Debugging story: a symptom → your first (wrong) guess → the real root cause → a short (→) fix list → the one-line lesson → a question.",
+    "Myth vs reality: a belief many engineers hold → what actually happens in practice, with a concrete example and real detail → the corrected takeaway → a question.",
+    "Benchmark / finding: what you measured and why → the actual numbers → the surprising result → what it means for building → a question.",
+    "How it really works: pick ONE mechanism (unified memory, J1939 transport, tokenization, DMA, quantization) → explain what actually happens under the hood in plain words → one gotcha most people miss → a question.",
+    "Before / after: how you used to do something → the specific thing that changed your mind → the concrete result → a question.",
+    "One hard-won tip: a single concrete technique → the failure it prevents → how to apply it as a short (→) checklist → a question.",
+    "Short and punchy: one sharp observation from real work in 4-6 lines, no list, one specific detail, ending on a question.",
+]
+
+# Poster background motifs, chosen at random each run.
+MOTIFS = ["circuit", "dots", "grid", "arcs", "slash", "none"]
+
 
 # ---------- LinkedIn post ----------------------------------------------------
 def find_trend(client, pillar):
@@ -172,7 +187,10 @@ def generate_post(client, pillar, trend=""):
         "Optional background you may reference in AT MOST one line, and ONLY if it "
         f"directly connects to something he has actually built or debugged:\n{trend}\n\n"
     ) if trend else ""
+    fmt = random.choice(FORMATS)
     user = f"""Write ONE LinkedIn post for today. Angle for today: {pillar}
+
+STRUCTURE TO USE TODAY (follow it loosely and keep it natural — this rotates daily so posts don't feel templated): {fmt}
 
 {hook_note}CRITICAL — CONCRETE, NOT ABSTRACT:
 Lead with a specific, real moment from his own work: a bug he hit, a number he
@@ -237,38 +255,71 @@ def hex_to_rgb(h):
     return tuple(int(h[i:i + 2], 16) for i in (0, 2, 4))
 
 
+def _draw_motif(d, W, H, style, TRACE, NODE, accent):
+    """Draw a subtle background motif in the lower area. Faint by design."""
+    if style == "circuit":
+        traces = [
+            [(95, 760), (240, 760), (240, 835), (380, 835)],
+            [(380, 760), (520, 760)],
+            [(520, 835), (680, 835), (680, 895)],
+            [(745, 720), (745, 800), (900, 800), (1000, 800)],
+            [(240, 895), (340, 895)],
+        ]
+        for seg in traces:
+            d.line(seg, fill=TRACE, width=2, joint="curve")
+        for seg in traces:
+            for (x, y) in seg:
+                d.ellipse([x - 6, y - 6, x + 6, y + 6], fill=NODE)
+    elif style == "dots":
+        for gy in range(700, 941, 42):
+            for gx in range(100, 1001, 42):
+                d.ellipse([gx - 3, gy - 3, gx + 3, gy + 3], fill=TRACE)
+    elif style == "grid":
+        for gx in range(100, W - 60, 96):
+            d.line([(gx, 690), (gx, 940)], fill=TRACE, width=1)
+        for gy in range(690, 941, 62):
+            d.line([(100, gy), (W - 100, gy)], fill=TRACE, width=1)
+    elif style == "arcs":
+        cx, cy = W - 64, H - 64
+        for r in range(110, 430, 80):
+            d.arc([cx - r, cy - r, cx + r, cy + r], 180, 270, fill=TRACE, width=2)
+    elif style == "slash":
+        d.line([(0, 1000), (W, 700)], fill=TRACE, width=3)
+        d.line([(0, 1040), (W, 740)], fill=NODE, width=2)
+    # "none" -> clean gradient only
+
+
 def render_poster(headline, kicker, subtitle, accent_hex, out_path):
     W = H = 1080
-    TOP, BOT = (11, 35, 78), (8, 16, 38)
     WHITE, MUTE = (241, 245, 251), (147, 166, 196)
-    TRACE, NODE, FRAME = (23, 50, 92), (43, 78, 134), (28, 54, 96)
     accent = hex_to_rgb(accent_hex)
     bold = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
     reg = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
 
+    # randomized palette so no two posters look the same
+    palettes = [
+        ((11, 35, 78), (8, 16, 38)),    # navy
+        ((14, 26, 64), (7, 12, 30)),    # indigo
+        ((9, 42, 60), (5, 15, 28)),     # teal-navy
+        ((26, 20, 56), (10, 8, 26)),    # deep violet
+        ((12, 32, 50), (6, 16, 30)),    # slate
+        ((40, 22, 40), (16, 8, 20)),    # plum
+    ]
+    TOP, BOT = random.choice(palettes)
+    TRACE = tuple(min(255, c + 16) for c in TOP)
+    NODE = tuple(min(255, c + 38) for c in TOP)
+    FRAME = tuple(min(255, c + 22) for c in TOP)
+
     img = Image.new("RGB", (W, H), TOP)
     d = ImageDraw.Draw(img)
-    # vertical gradient background
-    for yy in range(H):
-        t = yy / (H - 1)
-        d.line([(0, yy), (W, yy)], fill=(
+    for i in range(H):
+        t = i / (H - 1)
+        d.line([(0, i), (W, i)], fill=(
             int(TOP[0] + (BOT[0] - TOP[0]) * t),
             int(TOP[1] + (BOT[1] - TOP[1]) * t),
             int(TOP[2] + (BOT[2] - TOP[2]) * t)))
 
-    # subtle circuit-trace motif (lower-middle)
-    traces = [
-        [(95, 760), (240, 760), (240, 835), (380, 835)],
-        [(380, 760), (520, 760)],
-        [(520, 835), (680, 835), (680, 895)],
-        [(745, 720), (745, 800), (900, 800), (1000, 800)],
-        [(240, 895), (340, 895)],
-    ]
-    for seg in traces:
-        d.line(seg, fill=TRACE, width=2, joint="curve")
-    for seg in traces:
-        for (px, py) in seg:
-            d.ellipse([px - 6, py - 6, px + 6, py + 6], fill=NODE)
+    _draw_motif(d, W, H, random.choice(MOTIFS), TRACE, NODE, accent)
 
     # border frame + monogram
     d.rectangle([64, 64, W - 64, H - 64], outline=FRAME, width=2)
@@ -368,7 +419,8 @@ def send_brief(caption, kicker, news_html, poster_path):
 def main():
     client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
     weekday = datetime.date.today().weekday()
-    pillar, accent = PILLARS[weekday], ACCENTS[weekday]
+    pillar = PILLARS[weekday]
+    accent = random.choice(list(ACCENTS.values()))
 
     trend = find_trend(client, pillar)
     post = generate_post(client, pillar, trend)
