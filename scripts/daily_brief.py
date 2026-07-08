@@ -169,26 +169,33 @@ def generate_post(client, pillar, trend=""):
         "posts by Darshil:\n\n" + STYLE_SAMPLES + "\n"
     )
     hook_note = (
-        "A recent, real development you MAY use as a timely hook — only if it "
-        f"fits naturally with his experience:\n{trend}\n\n"
+        "Optional background you may reference in AT MOST one line, and ONLY if it "
+        f"directly connects to something he has actually built or debugged:\n{trend}\n\n"
     ) if trend else ""
     user = f"""Write ONE LinkedIn post for today. Angle for today: {pillar}
 
-{hook_note}Write the post as Darshil's OWN take, grounded in his real experience.
-If the development above fits, hook onto it; otherwise write from his own work.
-It is NOT a news summary.
+{hook_note}CRITICAL — CONCRETE, NOT ABSTRACT:
+Lead with a specific, real moment from his own work: a bug he hit, a number he
+measured, a build decision, a thing that broke and how he found it — exactly like
+the style samples (the NaN-from-an-apostrophe post, the 8 GB memory-budget post).
+Do NOT write an abstract think-piece. Do NOT write a headline like "why X needs Y".
+Do NOT comment on a news trend in the abstract. If you can't ground it in a
+believable, specific detail from his world (firmware, RTOS, CAN/J1939, his Jetson
+Orin Nano / local RAG / on-device LLM projects), choose a different concrete angle.
+It should read like he's telling a colleague what he just ran into and what he
+learned. Specific first, lesson second.
 
 Caption requirements:
-- Length 80-160 words. Tight. Cut every word that isn't earning its place.
-- First line is a real hook: specific, conversational, sentence case.
+- Length 80-160 words. Tight.
+- First line: a concrete, specific situation (something that happened), sentence
+  case. NOT a thesis, NOT "why X needs Y".
 - Short paragraphs / line breaks; use → for lists like he does.
-- Ground it in his real work (firmware, RTOS, CAN/J1939, on-device LLMs/edge AI,
-  his side projects). One genuine takeaway.
-- End with a real question that invites a reply.
-- 3-4 relevant hashtags on the last line.
+- Real specifics and one genuine takeaway.
+- End with a real question.
+- 3-4 hashtags on the last line.
 
 Respond with ONLY valid JSON (no fences, no markdown):
-{{"kicker":"SHORT UPPERCASE LABEL for the poster, sharing-oriented e.g. FIELD NOTES, EDGE AI, BUILD LOG (never job/hiring words)","poster_headline":"5-9 word distillation of the hook, in SENTENCE CASE (only first word + proper nouns capitalized)","poster_subtitle":"one short supporting line, under 8 words, sentence case","caption":"the full post text exactly as it should be pasted"}}"""
+{{"kicker":"SHORT UPPERCASE LABEL, sharing-oriented e.g. FIELD NOTES, EDGE AI, BUILD LOG (never job/hiring words)","poster_headline":"concrete 5-9 word distillation in SENTENCE CASE; NOT a 'why X needs Y' phrasing","poster_subtitle":"one short concrete supporting line, under 8 words, sentence case","caption":"the full post text exactly as it should be pasted"}}"""
     msg = client.messages.create(
         model=MODEL, max_tokens=1600, system=system,
         messages=[{"role": "user", "content": user}],
@@ -232,24 +239,47 @@ def hex_to_rgb(h):
 
 def render_poster(headline, kicker, subtitle, accent_hex, out_path):
     W = H = 1080
-    NAVY, WHITE, MUTE, LINE = (10, 31, 68), (238, 242, 248), (142, 160, 188), (30, 58, 99)
+    TOP, BOT = (11, 35, 78), (8, 16, 38)
+    WHITE, MUTE = (241, 245, 251), (147, 166, 196)
+    TRACE, NODE, FRAME = (23, 50, 92), (43, 78, 134), (28, 54, 96)
     accent = hex_to_rgb(accent_hex)
     bold = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
     reg = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
-    img = Image.new("RGB", (W, H), NAVY)
-    d = ImageDraw.Draw(img)
 
-    # thin border frame
-    d.rectangle([64, 64, W - 64, H - 64], outline=LINE, width=2)
-    # monogram top-right
-    d.ellipse([W - 150, 68, W - 74, 144], outline=accent, width=3)
-    mono = ImageFont.truetype(bold, 30)
+    img = Image.new("RGB", (W, H), TOP)
+    d = ImageDraw.Draw(img)
+    # vertical gradient background
+    for yy in range(H):
+        t = yy / (H - 1)
+        d.line([(0, yy), (W, yy)], fill=(
+            int(TOP[0] + (BOT[0] - TOP[0]) * t),
+            int(TOP[1] + (BOT[1] - TOP[1]) * t),
+            int(TOP[2] + (BOT[2] - TOP[2]) * t)))
+
+    # subtle circuit-trace motif (lower-middle)
+    traces = [
+        [(95, 760), (240, 760), (240, 835), (380, 835)],
+        [(380, 760), (520, 760)],
+        [(520, 835), (680, 835), (680, 895)],
+        [(745, 720), (745, 800), (900, 800), (1000, 800)],
+        [(240, 895), (340, 895)],
+    ]
+    for seg in traces:
+        d.line(seg, fill=TRACE, width=2, joint="curve")
+    for seg in traces:
+        for (px, py) in seg:
+            d.ellipse([px - 6, py - 6, px + 6, py + 6], fill=NODE)
+
+    # border frame + monogram
+    d.rectangle([64, 64, W - 64, H - 64], outline=FRAME, width=2)
+    d.ellipse([W - 152, 66, W - 72, 146], outline=accent, width=3)
+    mono = ImageFont.truetype(bold, 32)
     mw = d.textlength("DS", font=mono)
-    d.text((W - 112 - mw / 2, 92), "DS", font=mono, fill=accent)
+    d.text((W - 112 - mw / 2, 90), "DS", font=mono, fill=accent)
 
     # accent bar + kicker
     d.rectangle([100, 168, 168, 178], fill=accent)
-    d.text((100, 208), (kicker or "FIELD NOTES").upper(),
+    d.text((100, 208), (kicker or "BUILD LOG").upper(),
            font=ImageFont.truetype(bold, 28), fill=accent)
 
     # headline (capitalize first letter, wrap, accent the last line(s))
@@ -275,9 +305,9 @@ def render_poster(headline, kicker, subtitle, accent_hex, out_path):
         y += 88
 
     # divider + subtitle
-    d.line([(100, y + 12), (250, y + 12)], fill=LINE, width=2)
+    d.line([(100, y + 14), (250, y + 14)], fill=NODE, width=2)
     if subtitle:
-        d.text((100, y + 34), subtitle, font=ImageFont.truetype(reg, 27), fill=MUTE)
+        d.text((100, y + 36), subtitle, font=ImageFont.truetype(reg, 27), fill=MUTE)
 
     # footer
     d.rectangle([100, H - 164, 106, H - 104], fill=accent)
