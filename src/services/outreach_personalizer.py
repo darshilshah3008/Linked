@@ -6,6 +6,8 @@ Uses templates when no LLM is configured.
 
 from __future__ import annotations
 
+from src import profile
+
 from typing import Optional
 
 from src.schemas.outreach import OutreachInput
@@ -72,9 +74,9 @@ def _draft_recruiter_intro(
     return (
         f"Hi {contact_name},\n\n"
         f"I came across the {lead_title} opening at {company_name} and wanted to reach out.{company_line}\n\n"
-        f"I'm an Embedded Software Engineer with 6+ years of experience in automotive, "
-        f"agricultural, and industrial systems. My background in CAN/J1939, FreeRTOS, and "
-        f"CI/CD for firmware teams aligns well with this role.\n\n"
+        f"I'm an {profile.CURRENT_TITLE} at {profile.CURRENT_EMPLOYER} working on precision-ag "
+        f"ECUs, with {profile.EXPERIENCE_LINE}. My background in CAN / J1939, Simulink model-based "
+        f"development, and CI/CD test automation aligns well with this role.\n\n"
         f"I'd welcome the chance to discuss how my experience could contribute to your team. "
         f"Would you be open to a brief conversation?\n\n"
         f"Best regards,\nDarshil Shah"

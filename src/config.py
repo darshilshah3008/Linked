@@ -31,13 +31,17 @@ class Settings(BaseSettings):
 
     # Lead search
     lead_keywords: str = Field(
-        default="embedded software engineer,firmware engineer,embedded systems,RTOS,CAN,J1939,industrial automation",
+        default=(
+            "embedded software engineer,firmware engineer,embedded systems,ECU software,"
+            "controls software engineer,RTOS,CAN,CAN FD,J1939,ISOBUS,precision agriculture,"
+            "off-highway,Simulink"
+        ),
         description="Comma-separated lead keywords",
     )
 
     # Location
     preferred_locations: str = Field(
-        default="Manitowoc,Wisconsin,Remote,USA",
+        default="Sioux Falls,South Dakota,SD,Remote",
         description="Comma-separated preferred locations",
     )
 

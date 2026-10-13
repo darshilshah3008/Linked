@@ -6,7 +6,7 @@ match reasons, and company research.
 
 from __future__ import annotations
 
-from src.services.resume_tailor import CANDIDATE_EXPERIENCE
+from src import profile
 
 
 def generate_cover_letter(
@@ -64,34 +64,35 @@ def _build_key_points(match_reasons: list[str], description_snippet: str | None)
 
     # Parse match reasons for specific tech/domain mentions
     keyword_point_map = {
-        "can": "CAN/J1939 protocol implementation across multi-ECU agricultural and automotive systems",
-        "j1939": "SAE J1939 stack development including diagnostics and transport protocol",
-        "embedded": "6+ years of production embedded software development in C/C++",
-        "firmware": "Full-lifecycle firmware development from requirements to field deployment",
-        "freertos": "FreeRTOS-based real-time system design with deterministic task scheduling",
-        "rtos": "RTOS architecture design for safety-critical control applications",
-        "matlab": "MATLAB/Simulink model-based design with auto-code generation to embedded C",
-        "simulink": "Simulink control algorithm development with production code generation",
-        "ci/cd": "CI/CD pipeline automation reducing build times by ~40%",
-        "automotive": "Production embedded systems in automotive domain",
-        "agriculture": "Embedded control systems for precision agriculture equipment",
-        "industrial": "Industrial embedded systems including sensor networks and actuator control",
-        "controls": "Closed-loop control algorithm design for real-time systems",
-        "ble": "BLE wireless integration for IoT sensor platforms",
-        "iot": "IoT-enabled embedded systems with wireless connectivity",
+        "j1939": "CAN / SAE J1939 messaging and DM1 diagnostics on production precision-ag ECUs (UCM, ABM)",
+        "can": "CAN and CAN FD networking on multi-ECU agricultural vehicle platforms, validated in Vector CANalyzer",
+        "isobus": "ISOBUS (ISO 11783) precision-ag control modules at CNH Industrial",
+        "capl": "CAPL test scripts for bus-off recovery, DM1/DTC fault injection and J1939 address claim",
+        "firmware": "Firmware from driver level (SPI, inter-MCU protocols) up to application control logic",
+        "freertos": "FreeRTOS firmware, plus a custom preemptive RTOS built on ARM Cortex-M4F",
+        "rtos": "RTOS internals: built a preemptive scheduler with semaphores on ARM Cortex-M4F",
+        "matlab": "MATLAB/Simulink/Stateflow model-based development with Embedded Coder",
+        "simulink": "Simulink/Stateflow control software with production code generation (40% fewer integration issues)",
+        "ci/cd": "Python + GitLab CI/CD running Simulink Test and Unity unit tests on every merge request (40% faster builds)",
+        "agricultur": "Embedded control software for CNH precision-ag sprayers (Auto Boom, suspension, axle control)",
+        "controls": "Closed-loop vehicle control software (suspension and axle control, boom height control)",
+        "ble": "BLE OTA firmware update for IoT fixtures (Sloan Valve)",
+        "iot": "BLE OTA firmware update for IoT fixtures (Sloan Valve)",
+        "safety": "ECU feature work following ISO 26262 functional-safety practices",
     }
 
-    reasons_text = " ".join(match_reasons).lower()
+    search_text = " ".join(match_reasons + [description_snippet or ""])
     for keyword, point in keyword_point_map.items():
-        if keyword in reasons_text and point not in points:
+        hit = keyword in search_text.lower() if keyword in ("agricultur", "safety") else profile.has_term(search_text, keyword)
+        if hit and point not in points:
             points.append(point)
 
     # Add core points if we don't have enough
     if len(points) < 3:
         core = [
-            "6+ years of embedded software experience across automotive, agricultural, and industrial domains",
-            "Track record of resolving 100+ field issues across multiple embedded platforms",
-            "CI/CD pipeline automation reducing firmware build and test cycle times by ~40%",
+            profile.EXPERIENCE_LINE,
+            "Resolved 100+ Polarion defects with root-cause analysis, contributing to 30% fewer field failures",
+            "GitLab CI/CD automation cutting firmware build and deploy time by 40%",
         ]
         for p in core:
             if p not in points:
@@ -121,10 +122,10 @@ def _build_cover_letter(
     opening = (
         f"Dear Hiring Manager,\n\n"
         f"I am writing to express my strong interest in the {lead_title} position "
-        f"at {company_name}.{company_hook} With over six years of hands-on embedded "
-        f"software engineering experience spanning automotive, agricultural machinery, "
-        f"and industrial IoT systems, I am confident I can make a meaningful contribution "
-        f"to your team."
+        f"at {company_name}.{company_hook} I am an {profile.CURRENT_TITLE} at "
+        f"{profile.CURRENT_EMPLOYER} with {profile.EXPERIENCE_LINE} for agricultural "
+        f"and off-highway vehicle platforms, and I am confident I can make a meaningful "
+        f"contribution to your team."
     )
 
     # Body — key qualifications
@@ -136,20 +137,21 @@ def _build_cover_letter(
 
     # Experience highlights
     experience = (
-        f"\n\nAt CNH Industrial, I develop embedded control software for agricultural "
-        f"sprayer systems, working extensively with CAN/J1939 protocols, MATLAB/Simulink "
-        f"code generation, and real-time control algorithms. I have contributed to "
-        f"reducing firmware build times by approximately 40% through CI/CD automation "
-        f"and have resolved over 100 tracked field issues across our embedded platforms."
+        f"\n\nAt CNH Industrial in Sioux Falls I develop software for the Universal Control "
+        f"Module and Auto Boom Module, precision-electronics ECUs that communicate over "
+        f"CAN / SAE J1939. Before that, on the Sprayers program, I built suspension and axle "
+        f"control software in MATLAB/Simulink/Stateflow with Embedded Coder, wrote CAPL "
+        f"tests in Vector CANalyzer, cut build and deploy time by 40% with Python and "
+        f"GitLab CI/CD, and resolved 100+ defects in Polarion with root-cause analysis."
     )
 
     # Address gaps proactively if any
     gap_text = ""
-    if missing_requirements:
-        gap_items = ", ".join(missing_requirements[:2])
+    skill_gaps = [g for g in missing_requirements if not g.startswith("BLOCKER")]
+    if skill_gaps:
+        gap_items = ", ".join(skill_gaps[:2])
         gap_text = (
-            f"\n\nWhile my primary focus has been on embedded C/C++ and RTOS development, "
-            f"I am eager to expand my expertise in areas such as {gap_items}, and I am a "
+            f"\n\nMy core is embedded C/C++, RTOS and vehicle networking; I am eager to expand my expertise in areas such as {gap_items}, and I am a "
             f"fast learner with a strong foundation in systems-level programming."
         )
 
@@ -159,8 +161,8 @@ def _build_cover_letter(
         f"experience can contribute to {company_name}'s engineering goals. I am "
         f"available for a conversation at your convenience.\n\n"
         f"Thank you for your time and consideration.\n\n"
-        f"Sincerely,\nDarshil Shah\n"
-        f"Embedded Software Engineer"
+        f"Sincerely,\n{profile.NAME}\n"
+        f"{profile.CURRENT_TITLE}"
     )
 
     return opening + body + experience + gap_text + closing
@@ -185,8 +187,12 @@ def _build_customization_notes(
         "metrics relevant to this role."
     )
 
-    if missing_requirements:
-        gap_list = ", ".join(missing_requirements[:3])
+    blockers = [g for g in missing_requirements if g.startswith("BLOCKER")]
+    if blockers:
+        notes.insert(0, "Check eligibility before applying: " + "; ".join(blockers))
+    skill_gaps = [g for g in missing_requirements if not g.startswith("BLOCKER")]
+    if skill_gaps:
+        gap_list = ", ".join(skill_gaps[:3])
         notes.append(
             f"Consider adding a sentence about transferable skills related to: {gap_list}."
         )

@@ -12,7 +12,7 @@ argument-hint: 'What do you want to do? (e.g. add company, change scoring, run p
 
 - **Entry point:** `python -m src <command>` or `copilot <command>` (after `pip install -e .`)
 - **Database:** SQLite at `data/app.db` (auto-created, never committed to git)
-- **Tests:** `python -m pytest tests/ -v` (38 tests)
+- **Tests:** `python -m pytest tests/ -v` (50 tests)
 - **Report:** `python generate_report_docx.py` (reads `dashboard.json`)
 
 ---
@@ -150,14 +150,18 @@ The scoring engine auto-scores based on `description_snippet` content. Higher sc
 
 | Factor | Points | Keywords |
 |--------|--------|----------|
-| Title match | 35 | embedded software, firmware, embedded systems, rtos, controls engineer |
-| Industry match | 20 | automotive, agriculture, industrial, iot, machinery, defense, aerospace, robotics |
-| Protocol/stack | 20 | can, j1939, freertos, c/c++, stm32, spi, i2c, uart, matlab, simulink |
-| Seniority | 15 | senior=1.0, mid-level=0.6, junior/intern=0.1 |
-| Location | 10 | Preferred (Manitowoc/WI/Remote)=1.0, Remote=0.9, other=0.3 |
+| Title match | 35 | embedded, firmware, ECU, RTOS, controls software, bootloader, BSP; non-embedded titles get 0 |
+| Stack match | 20 | Owned skills from `src/profile.py` (CAN/CAN FD/J1939/ISOBUS, Embedded C/C++, FreeRTOS, Simulink, CAPL, HIL...), 4+ hits = full |
+| Industry | 20 | Tier 1 ag / off-highway / vehicle = full; tier 2 industrial / robotics / aerospace / medical = 60% |
+| Seniority | 15 | Engineer II: II/III/Senior=1.0, unstated=0.8, Staff/Lead=0.5, Engineer I=0.4, intern=0.1 |
+| Location | 10 | Preferred (Sioux Falls/SD)=1.0, Remote=0.9, Hybrid=0.6, elsewhere in U.S.=0.5 |
+
+Matching is whole-token via `profile.has_term()` (no "can" in "candidate"). Visa blockers (U.S. citizen, ITAR, clearance, no sponsorship) cap the score at 30 and add `BLOCKER: ...` to `missing_requirements`.
+
+**Candidate facts live only in `src/profile.py`.** Resume bullets, cover letters, outreach and prompts read from it.
 
 **To change scoring weights:** Edit the multipliers in `src/services/scoring.py`.  
-**To add keywords:** Add to the relevant list in `score_lead()`.
+**To add keywords:** Add to the banks at the top of `scoring.py`; add owned skills to `OWNED_SKILLS` in `src/profile.py`.
 
 ---
 
@@ -270,8 +274,8 @@ python generate_report_docx.py
 ## Testing
 
 ```bash
-python -m pytest tests/ -v           # All 38 tests
-python -m pytest tests/test_scoring.py -v    # 10 scoring tests
+python -m pytest tests/ -v           # All 50 tests
+python -m pytest tests/test_scoring.py -v    # 20 scoring tests
 python -m pytest tests/test_approval.py -v   # 9 approval tests
 python -m pytest tests/test_repository.py -v # 13 repository tests
 python -m pytest tests/test_content.py -v    # 6 content tests

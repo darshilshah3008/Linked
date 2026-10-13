@@ -1,40 +1,58 @@
 """Resume tailoring service.
 
-Generates keyword-targeted resume bullets for specific job leads
-using the lead's description, match reasons, and tech keywords.
+Picks and orders the candidate's real resume bullets for a specific job lead.
+Every bullet comes from ``src.profile.ACHIEVEMENTS``; nothing is invented.
 """
 
 from __future__ import annotations
 
-from src.services.llm_client import get_llm_client
+from src import profile
 
-# Candidate's verified experience — only these can be used
-CANDIDATE_EXPERIENCE = {
-    "summary": (
-        "Embedded Software Engineer with 6+ years of experience in automotive, "
-        "agricultural machinery, and industrial IoT systems."
-    ),
-    "skills": [
-        "Embedded C/C++", "CAN/J1939", "ISOBUS", "FreeRTOS", "RTOS",
-        "MATLAB/Simulink", "STM32", "NXP", "SPI", "I2C", "UART",
-        "RS-485", "BLE", "Ethernet", "CI/CD", "Git", "Jenkins",
-        "embedded Linux", "Python scripting", "unit testing",
-    ],
-    "achievements": [
-        "Reduced firmware build times by ~40% through CI/CD pipeline automation",
-        "Resolved 100+ tracked field issues across sprayer control platforms",
-        "Implemented CAN/J1939 communication stacks for multi-ECU systems",
-        "Developed MATLAB/Simulink auto-code generation workflows",
-        "Designed embedded control software for agricultural sprayer systems",
-        "Integrated FreeRTOS task scheduling for real-time control loops",
-        "Built automated test frameworks for embedded firmware validation",
-    ],
-    "companies": [
-        {"name": "CNH Industrial", "role": "Embedded Software Engineer", "domain": "Agricultural sprayers"},
-        {"name": "The Coats Company", "role": "Software Engineer", "domain": "Automotive tire changers"},
-        {"name": "Sloan Valve", "role": "Firmware Engineer", "domain": "IoT sensor systems"},
-    ],
+# Job-posting term -> label shown as a target keyword.
+KEYWORD_BANK: dict[str, str] = {
+    "can fd": "CAN FD", "can": "CAN bus", "j1939": "SAE J1939", "isobus": "ISOBUS",
+    "iso 11783": "ISOBUS", "uds": "UDS", "xcp": "XCP", "lin": "LIN",
+    "freertos": "FreeRTOS", "rtos": "RTOS", "bare-metal": "Bare-metal", "bare metal": "Bare-metal",
+    "embedded c": "Embedded C", "c/c++": "C/C++", "c++": "C++", "python": "Python", "c#": "C#",
+    "capl": "CAPL", "canalyzer": "CANalyzer", "canoe": "CANoe",
+    "stm32": "STM32", "nxp": "NXP", "arm": "ARM Cortex-M", "cortex": "ARM Cortex-M",
+    "renesas": "Renesas", "spi": "SPI", "i2c": "I2C", "uart": "UART", "rs-485": "RS-485",
+    "ble": "BLE", "bluetooth": "Bluetooth", "ethernet": "Ethernet", "ota": "OTA updates",
+    "matlab": "MATLAB", "simulink": "Simulink", "stateflow": "Stateflow",
+    "embedded coder": "Embedded Coder", "model-based": "Model-based design",
+    "ci/cd": "CI/CD", "gitlab": "GitLab CI/CD", "jenkins": "Jenkins", "git": "Git",
+    "unit test": "Unit testing", "hil": "HIL testing", "hardware-in-the-loop": "HIL testing",
+    "iso 26262": "ISO 26262", "iso 25119": "ISO 25119", "functional safety": "Functional safety",
+    "misra": "MISRA C", "autosar": "AUTOSAR", "polarion": "Polarion",
+    "diagnostics": "Diagnostics", "dm1": "DM1 diagnostics", "bootloader": "Bootloader",
+    "device driver": "Device drivers", "driver": "Device drivers",
+    "embedded linux": "Embedded Linux", "firmware": "Firmware", "embedded": "Embedded systems",
+    "ecu": "ECU software", "precision ag": "Precision agriculture", "sprayer": "Sprayers",
+    "agricultur": "Agriculture", "off-highway": "Off-highway", "automotive": "Automotive",
+    "industrial": "Industrial", "iot": "IoT", "controls": "Controls", "pwm": "PWM control",
+    "debug": "Debugging", "root cause": "Root-cause analysis", "requirements": "Requirements traceability",
 }
+
+# Job-posting term -> which real achievement(s) it should pull forward, in priority order.
+KEYWORD_TO_ACHIEVEMENTS: dict[str, list[str]] = {
+    "j1939": ["j1939", "capl"], "can": ["j1939", "diagnostics"], "can fd": ["j1939"],
+    "isobus": ["precision_ag", "j1939"], "dm1": ["j1939", "capl"], "diagnostics": ["capl", "diagnostics"],
+    "capl": ["capl"], "canalyzer": ["capl", "j1939"], "canoe": ["capl"],
+    "simulink": ["simulink"], "matlab": ["simulink"], "stateflow": ["simulink"],
+    "embedded coder": ["simulink"], "model-based": ["simulink"],
+    "ci/cd": ["ci/cd"], "gitlab": ["ci/cd"], "jenkins": ["ci/cd"], "unit test": ["ci/cd", "rtos"],
+    "hil": ["ci/cd"], "git": ["git"], "freertos": ["freertos", "rtos"], "rtos": ["rtos", "freertos"],
+    "spi": ["freertos"], "arm": ["rtos"], "cortex": ["rtos"], "renesas": ["inter-mcu"], "uart": ["inter-mcu"],
+    "ble": ["ble"], "bluetooth": ["ble"], "ota": ["ble"], "c#": ["diagnostics"],
+    "debug": ["defects"], "root cause": ["defects"], "requirements": ["defects"], "polarion": ["defects"],
+    "precision ag": ["precision_ag"], "sprayer": ["precision_ag", "simulink"],
+    "agricultur": ["precision_ag", "simulink"], "controls": ["simulink", "precision_ag"],
+    "pwm": ["precision_ag"], "ecu": ["j1939", "precision_ag"], "functional safety": ["precision_ag"],
+    "iso 26262": ["precision_ag"], "embedded": ["j1939", "simulink"], "firmware": ["freertos", "ble"],
+}
+
+# Strong default order when a posting gives little to go on.
+DEFAULT_ORDER = ["j1939", "simulink", "ci/cd", "capl", "defects", "precision_ag", "git", "diagnostics"]
 
 
 def tailor_resume_bullets(
@@ -44,27 +62,21 @@ def tailor_resume_bullets(
     match_reasons: list[str] | None = None,
     missing_requirements: list[str] | None = None,
 ) -> dict:
-    """Generate tailored resume bullets for a specific job.
+    """Generate tailored resume content for a specific job.
 
     Returns a dict with:
       - target_keywords: keywords extracted from the job
-      - tailored_bullets: rewritten resume bullets emphasizing matching skills
-      - skills_to_highlight: skills from candidate profile that match
-      - gaps_to_address: requirements the candidate may lack
-      - summary_line: a tailored one-line professional summary
+      - skills_to_highlight: candidate skills that match those keywords
+      - tailored_summary: a one-line summary pointed at this role
+      - tailored_bullets: real resume bullets, most relevant first
+      - gaps_to_address: requirements the candidate may lack (incl. blockers)
     """
-    # Extract keywords from the job posting
-    job_text = " ".join([
-        lead_title or "",
-        company_name or "",
-        description_snippet or "",
-    ]).lower()
+    job_text = " ".join([lead_title or "", company_name or "", description_snippet or ""])
 
     target_keywords = _extract_target_keywords(job_text)
-    matching_skills = _match_candidate_skills(target_keywords)
-    tailored_bullets = _generate_tailored_bullets(target_keywords, matching_skills)
+    matching_skills = _match_candidate_skills(job_text)
+    tailored_bullets = _select_bullets(job_text)
     summary_line = _generate_summary_line(lead_title, company_name, matching_skills)
-    gaps = missing_requirements or []
 
     return {
         "job_title": lead_title,
@@ -73,110 +85,55 @@ def tailor_resume_bullets(
         "skills_to_highlight": matching_skills,
         "tailored_summary": summary_line,
         "tailored_bullets": tailored_bullets,
-        "gaps_to_address": gaps,
+        "gaps_to_address": list(missing_requirements or []),
     }
 
 
 def _extract_target_keywords(job_text: str) -> list[str]:
-    """Extract relevant technical keywords from job text."""
-    keyword_bank = {
-        "can": "CAN bus", "j1939": "J1939", "isobus": "ISOBUS",
-        "freertos": "FreeRTOS", "rtos": "RTOS",
-        "embedded c": "Embedded C", "c++": "C++", "c/c++": "C/C++",
-        "stm32": "STM32", "nxp": "NXP", "arm": "ARM",
-        "spi": "SPI", "i2c": "I2C", "uart": "UART",
-        "rs-485": "RS-485", "rs485": "RS-485",
-        "ble": "BLE", "bluetooth": "Bluetooth",
-        "ethernet": "Ethernet", "tcp/ip": "TCP/IP",
-        "matlab": "MATLAB", "simulink": "Simulink",
-        "ci/cd": "CI/CD", "jenkins": "Jenkins", "git": "Git",
-        "linux": "Embedded Linux", "python": "Python",
-        "firmware": "Firmware", "embedded": "Embedded Systems",
-        "automotive": "Automotive", "agriculture": "Agriculture",
-        "industrial": "Industrial", "iot": "IoT",
-        "controls": "Controls", "automation": "Automation",
-        "sensor": "Sensors", "actuator": "Actuators",
-        "debug": "Debugging", "testing": "Testing",
-    }
-    found = []
-    for keyword, label in keyword_bank.items():
-        if keyword in job_text and label not in found:
+    found: list[str] = []
+    for term, label in KEYWORD_BANK.items():
+        if _hit(job_text, term) and label not in found:
             found.append(label)
     return found
 
 
-def _match_candidate_skills(target_keywords: list[str]) -> list[str]:
-    """Find which candidate skills match the target keywords."""
+def _match_candidate_skills(job_text: str) -> list[str]:
+    """Candidate skills (display names) whose aliases appear in the job text."""
     matched = []
-    target_lower = {kw.lower() for kw in target_keywords}
-    for skill in CANDIDATE_EXPERIENCE["skills"]:
-        if skill.lower() in target_lower:
+    for skill, aliases in profile.OWNED_SKILLS.items():
+        if any(profile.has_term(job_text, a) for a in aliases):
             matched.append(skill)
-        else:
-            # Partial match
-            for t in target_lower:
-                if t in skill.lower() or skill.lower() in t:
-                    if skill not in matched:
-                        matched.append(skill)
-                    break
     return matched
 
 
-def _generate_tailored_bullets(
-    target_keywords: list[str], matching_skills: list[str]
-) -> list[str]:
-    """Generate resume bullets emphasizing the matching keywords."""
-    keyword_lower = {kw.lower() for kw in target_keywords}
-    bullets = []
-
-    # Map achievements to keyword relevance
-    keyword_achievement_map = {
-        "can": "Implemented CAN/J1939 communication stacks for multi-ECU agricultural and automotive systems, ensuring reliable real-time data exchange across distributed embedded controllers.",
-        "j1939": "Developed SAE J1939 protocol layers for heavy equipment platforms, including diagnostics (DM1/DM2), transport protocol, and address claim handling.",
-        "freertos": "Designed FreeRTOS-based task architectures for real-time control loops, managing sensor acquisition, CAN communication, and actuator control with deterministic timing.",
-        "rtos": "Engineered RTOS-based embedded systems with priority-based scheduling, achieving sub-millisecond response times for safety-critical control applications.",
-        "ci/cd": "Reduced firmware build and validation times by ~40% through CI/CD pipeline automation using Jenkins, Git, and automated embedded test frameworks.",
-        "matlab": "Developed MATLAB/Simulink auto-code generation workflows for control algorithms, bridging model-based design with production embedded C deployment.",
-        "simulink": "Created Simulink models for sprayer control systems with auto-code generation to embedded C, reducing manual coding effort and improving algorithm traceability.",
-        "firmware": "Designed and maintained production firmware for multi-platform embedded systems spanning automotive, agricultural, and IoT domains.",
-        "embedded": "Built embedded control software for agricultural sprayer systems processing real-time sensor data, CAN bus communications, and closed-loop actuator control.",
-        "testing": "Built automated test frameworks for embedded firmware validation, including hardware-in-the-loop (HIL) and software-in-the-loop (SIL) test strategies.",
-        "automation": "Architected CI/CD pipelines for embedded firmware teams, automating build, static analysis, and flash-based testing across multiple target platforms.",
-        "ble": "Integrated BLE wireless communication into IoT sensor systems for remote monitoring and configuration of embedded devices.",
-        "linux": "Developed embedded Linux applications for gateway devices bridging field sensor networks with cloud-based monitoring platforms.",
-        "python": "Created Python-based test automation scripts and data analysis tools supporting embedded firmware development and field issue resolution.",
-        "automotive": "Delivered embedded software for automotive systems including tire changer controllers and vehicle diagnostic interfaces.",
-        "iot": "Designed IoT-enabled embedded systems with wireless connectivity (BLE, Wi-Fi) for smart building and industrial monitoring applications.",
-        "sensor": "Implemented sensor acquisition and signal conditioning firmware for temperature, pressure, flow, and position sensors in industrial applications.",
-        "debug": "Resolved 100+ tracked field issues across embedded control platforms using systematic debugging with JTAG, logic analyzers, and CAN bus monitors.",
-        "controls": "Developed closed-loop control algorithms for agricultural sprayer systems, managing flow rate, pressure, and nozzle actuation in real time.",
-        "industrial": "Built embedded control systems for industrial equipment including valve controllers, sensor networks, and automated machinery.",
-        "stm32": "Developed bare-metal and RTOS-based firmware for STM32 microcontrollers, including peripheral drivers for SPI, I2C, UART, and ADC.",
-        "arm": "Programmed ARM Cortex-M based microcontrollers (STM32, NXP) for real-time embedded control applications.",
-    }
-
-    for kw in target_keywords:
-        kw_lower = kw.lower()
-        for key, bullet in keyword_achievement_map.items():
-            if key in kw_lower or kw_lower in key:
-                if bullet not in bullets:
-                    bullets.append(bullet)
-                break
-
-    # Always include the core achievements if nothing specific matched
-    if not bullets:
-        bullets = list(CANDIDATE_EXPERIENCE["achievements"])
-
-    return bullets[:8]  # Cap at 8 bullets
+def _select_bullets(job_text: str, limit: int = 6) -> list[str]:
+    keys: list[str] = []
+    for term, ach_keys in KEYWORD_TO_ACHIEVEMENTS.items():
+        if _hit(job_text, term):
+            for k in ach_keys:
+                if k not in keys:
+                    keys.append(k)
+    for k in DEFAULT_ORDER:  # top up with strongest general bullets
+        if len(keys) >= limit:
+            break
+        if k not in keys:
+            keys.append(k)
+    return [profile.ACHIEVEMENTS[k] for k in keys[:limit]]
 
 
-def _generate_summary_line(
-    lead_title: str, company_name: str, matching_skills: list[str]
-) -> str:
-    """Generate a tailored one-line professional summary."""
-    skill_list = ", ".join(matching_skills[:5]) if matching_skills else "embedded C/C++, RTOS, CAN/J1939"
+def _hit(text: str, term: str) -> bool:
+    # Stems like "agricultur" are meant as prefixes; everything else is a whole token.
+    if term in ("agricultur",):
+        return term in text.lower()
+    return profile.has_term(text, term)
+
+
+def _generate_summary_line(lead_title: str, company_name: str, matching_skills: list[str]) -> str:
+    skills = ", ".join(matching_skills[:5]) if matching_skills else ", ".join(profile.CORE_SKILLS[:3])
+    role = (lead_title or "embedded software").lower()
+    for prefix in ("senior ", "sr. ", "sr "):
+        role = role.replace(prefix, "")
     return (
-        f"Embedded Software Engineer with 6+ years of experience specializing in "
-        f"{skill_list} — seeking to contribute to {company_name}'s "
-        f"{lead_title.lower().replace('senior ', '').replace('sr. ', '')} initiatives."
+        f"{profile.CURRENT_TITLE} with {profile.EXPERIENCE_LINE}, specializing in "
+        f"{skills} — ready to contribute to {company_name}'s {role} work."
     )

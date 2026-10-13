@@ -8,6 +8,8 @@ All prompts follow the anti-hallucination policy:
 
 from __future__ import annotations
 
+from src import profile
+
 from jinja2 import Template
 
 # ── Lead Finder Prompt ─────────────────────────────────────
@@ -58,10 +60,7 @@ CONTENT_SYSTEM = """You are a LinkedIn content assistant for an embedded softwar
 Generate content drafts based on the given theme.
 
 Author background:
-- 6+ years embedded software experience
-- Domains: automotive, agricultural machinery, industrial IoT
-- Skills: Embedded C/C++, FreeRTOS, CAN/J1939, MATLAB/Simulink, CI/CD
-- Worked at CNH Industrial (Sprayers), The Coats Company, Sloan Valve
+""" + profile.prompt_background() + """
 
 Content rules:
 - Practical, technical tone. No motivational fluff.
@@ -89,9 +88,7 @@ Context:
 {% if contact_name %}- Recipient: {{ contact_name }}{% if contact_role %} ({{ contact_role }}){% endif %}{% endif %}
 
 Author background:
-- Embedded Software Engineer, 6+ years experience
-- CAN/J1939, FreeRTOS, MATLAB/Simulink, CI/CD automation
-- Industries: automotive, agricultural machinery, industrial IoT
+""" + profile.prompt_background() + """
 
 Rules:
 - Keep the message short (under 150 words for connection notes, under 300 for intros).

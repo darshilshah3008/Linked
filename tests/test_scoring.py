@@ -57,18 +57,18 @@ class TestScoreLead:
         assert score_senior > score_intern
 
     def test_location_match(self):
-        lead_wi = _make_lead(
+        lead_pref = _make_lead(
             title="Embedded Software Engineer",
-            location="Manitowoc, Wisconsin",
+            location="Sioux Falls, SD",
             description_snippet="CAN bus, embedded controls",
         )
         lead_ca = _make_lead(
             title="Embedded Software Engineer",
             location="San Francisco, CA",
         )
-        score_wi = score_lead(lead_wi).score
+        score_pref = score_lead(lead_pref).score
         score_ca = score_lead(lead_ca).score
-        assert score_wi > score_ca
+        assert score_pref > score_ca
 
     def test_remote_location_scores_well(self):
         lead = _make_lead(
@@ -125,3 +125,77 @@ class TestScoreLead:
         )
         result = score_lead(lead)
         assert len(result.missing_requirements) > 0
+
+
+class TestEmbeddedSpecificScoring:
+    """Embedded-engineer specific behaviour: no substring false positives, blockers, gaps."""
+
+    def test_no_substring_false_positives(self):
+        # "candidates", "Canada", "responsible", "able", "laws", "robust", "digital"
+        # used to match CAN, BLE, AWS, Rust and Git.
+        lead = _make_lead(
+            title="Salesforce Developer",
+            description_snippet="Responsible for scalable digital apps; candidates able to "
+            "work with our Canada team. Robust knowledge of privacy laws.",
+        )
+        result = score_lead(lead)
+        assert not any("stack" in r.lower() for r in result.inferred_match_reasons)
+        assert result.missing_requirements == []
+        assert result.score < 30
+
+    def test_can_matches_as_protocol(self):
+        lead = _make_lead(title="Embedded Software Engineer", description_snippet="CAN/J1939 and CAN FD networks.")
+        reasons = " ".join(score_lead(lead).inferred_match_reasons).lower()
+        assert "j1939" in reasons and "can fd" in reasons
+
+    def test_more_stack_overlap_scores_higher(self):
+        thin = _make_lead(title="Embedded Software Engineer", description_snippet="Experience with C++.")
+        deep = _make_lead(
+            title="Embedded Software Engineer",
+            description_snippet="Embedded C, FreeRTOS, CAN FD, J1939, Simulink, CAPL, HIL.",
+        )
+        assert score_lead(deep).score > score_lead(thin).score
+
+    def test_us_citizen_itar_is_blocker_and_capped(self):
+        lead = _make_lead(
+            title="Senior Embedded Software Engineer",
+            location="Sioux Falls, SD",
+            description_snippet="CAN, J1939, FreeRTOS, embedded C for military vehicles. "
+            "Must be a U.S. citizen due to ITAR.",
+        )
+        result = score_lead(lead)
+        assert result.score <= 30
+        assert any(m.startswith("BLOCKER") for m in result.missing_requirements)
+
+    def test_no_sponsorship_is_blocker(self):
+        lead = _make_lead(
+            title="Firmware Engineer",
+            description_snippet="Embedded C on STM32. We will not sponsor work visas.",
+        )
+        assert any("sponsorship" in m.lower() for m in score_lead(lead).missing_requirements)
+
+    def test_owned_skills_not_flagged_as_gaps(self):
+        lead = _make_lead(
+            title="Embedded Software Engineer",
+            description_snippet="Python, CAN FD, ISO 26262, Simulink, MISRA. AUTOSAR and UDS a plus.",
+        )
+        gaps = score_lead(lead).missing_requirements
+        assert "Python programming" not in gaps and not any("Python" in g for g in gaps)
+        assert any("AUTOSAR" in g for g in gaps)
+        assert any("UDS" in g for g in gaps)
+
+    def test_non_embedded_title_gets_no_title_credit(self):
+        web = _make_lead(title="Full Stack Developer", description_snippet="Embedded analytics dashboards in React.")
+        result = score_lead(web)
+        assert result.score < 40
+
+    def test_engineer_ii_beats_staff_and_intern(self):
+        ii = score_lead(_make_lead(title="Embedded Software Engineer II")).score
+        staff = score_lead(_make_lead(title="Staff Embedded Software Engineer")).score
+        intern = score_lead(_make_lead(title="Embedded Software Intern")).score
+        assert ii > staff > intern
+
+    def test_ag_domain_beats_adjacent_domain(self):
+        ag = _make_lead(title="Embedded Software Engineer", description_snippet="Precision agriculture sprayer ECUs.")
+        med = _make_lead(title="Embedded Software Engineer", description_snippet="Medical device firmware.")
+        assert score_lead(ag).score > score_lead(med).score

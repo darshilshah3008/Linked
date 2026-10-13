@@ -203,7 +203,7 @@ job-search-copilot/
 │       ├── time_utils.py              # utcnow(), format_datetime(), days_ago()
 │       └── validators.py             # Message type & status validators
 │
-└── tests/                             # Test suite (38 tests)
+└── tests/                             # Test suite (50 tests)
     ├── __init__.py
     ├── test_scoring.py                # 10 tests — lead relevance scoring
     ├── test_approval.py               # 9 tests — approval safety checks
@@ -267,8 +267,8 @@ LLM_PROVIDER=mock
 # OPENAI_MODEL=gpt-4o-mini       # OpenAI model to use
 
 # Job Search Profile
-LEAD_KEYWORDS=embedded software engineer,firmware engineer,embedded systems,controls engineer
-PREFERRED_LOCATIONS=Manitowoc,Wisconsin,Remote,USA
+LEAD_KEYWORDS=embedded software engineer,firmware engineer,embedded systems,ECU software,CAN FD,J1939,ISOBUS,precision agriculture
+PREFERRED_LOCATIONS=Sioux Falls,South Dakota,SD,Remote
 
 # Content Strategy
 POSTS_PER_WEEK=3
@@ -491,11 +491,21 @@ Every job lead is scored on a **deterministic 0-100 scale** (no ML or opaque mod
 
 | Factor | Max Points | What It Checks |
 |--------|------------|----------------|
-| **Title Keyword Match** | 35 | Scans title & description for: `embedded software`, `firmware`, `embedded systems`, `rtos`, `controls engineer` |
-| **Industry Match** | 20 | Company industry or description keywords: `automotive`, `agriculture`, `industrial`, `iot`, `machinery`, `defense`, `aerospace`, `robotics` |
-| **Protocol/Stack Match** | 20 | Technical stack mentions: `can`, `j1939`, `freertos`, `c/c++`, `stm32`, `spi`, `i2c`, `uart`, `matlab`, `simulink` |
-| **Seniority Fit** | 15 | `senior` = full points, `mid-level` = 60%, `junior`/`intern` = 10% |
-| **Location Match** | 10 | Preferred locations = full points, `remote` = 90%, other = 30% |
+| **Title Match** | 35 | Is it an embedded role? `embedded`, `firmware`, `ECU`, `RTOS`, `controls software`, `bootloader`, `BSP`... Non-embedded titles (web, data, sales, full stack...) get 0 even if the description says "embedded" |
+| **Stack Match** | 20 | Embedded stack you actually have (from `src/profile.py`): CAN / CAN FD / J1939 / ISOBUS, Embedded C/C++, FreeRTOS, Simulink / Stateflow / Embedded Coder, CAPL / CANalyzer, HIL, ISO 26262, MISRA... Scales with distinct hits (4+ = full) |
+| **Industry Match** | 20 | Tier 1 (full): precision ag, agriculture, off-highway, commercial vehicle, automotive, hydraulics. Tier 2 (60%): industrial, robotics, aerospace, medical device, EV/BMS, semiconductor |
+| **Seniority Fit** | 15 | Tuned for an Engineer II: `II`/`III`/`Senior` = 100%, unstated = 80%, `Staff`/`Principal`/`Lead` = 50%, `Junior`/`Engineer I` = 40%, intern/co-op = 10% |
+| **Location Fit** | 10 | `PREFERRED_LOCATIONS` = 100%, remote = 90%, hybrid = 60%, elsewhere in the U.S. = 50% (open to relocation) |
+
+All matching is whole-token: `CAN` matches "CAN bus" and "CAN/J1939" but not "candidate" or "Canada"; `BLE` does not match "responsible".
+
+**Eligibility blockers.** When `NEEDS_VISA_SPONSORSHIP = True` in `src/profile.py`, postings that require U.S. citizenship, ITAR / export-control status, a security clearance, a green card, or say they will not sponsor are capped at **30** and listed first in `missing_requirements` as `BLOCKER: ...`.
+
+**Skill gaps** are only flagged when you don't already own the skill: e.g. AUTOSAR, UDS, XCP, LIN, Yocto, Zephyr, FPGA, Rust, DO-178C, ISO 21434.
+
+### Candidate Profile
+
+`src/profile.py` is the single source of truth for experience, skills and resume bullets. Scoring, resume tailoring, cover letters, outreach and LLM prompts all read from it. Update it when your resume changes; never hard-code experience elsewhere.
 
 ### Score Output
 
@@ -508,12 +518,14 @@ Each scored lead includes:
 
 ### Example
 
-A "Senior Embedded Software Engineer" at Deere & Company mentioning CAN, J1939, and FreeRTOS in Moline, IL would score approximately **93/100** (high confidence):
-- Title: 35/35 (direct "embedded software" match)
-- Industry: 20/20 (agriculture)
-- Protocol: 20/20 (CAN + J1939 + FreeRTOS)
+A "Senior Embedded Software Engineer" at Deere & Company mentioning CAN/J1939, FreeRTOS and C/C++ for agricultural equipment in Moline, IL scores **95/100** (high confidence):
+- Title: 35/35 ("embedded")
+- Stack: 20/20 (CAN, J1939, FreeRTOS, C/C++)
+- Industry: 20/20 (agricultural)
 - Seniority: 15/15 (senior)
-- Location: 3/10 (Moline, not preferred location)
+- Location: 5/10 (elsewhere in the U.S.)
+
+The same posting with "Must be a U.S. citizen (ITAR)" is capped at 30 with `BLOCKER: U.S. citizenship required`.
 
 ---
 
@@ -700,7 +712,7 @@ python -m pytest tests/ --cov=src
 python -m pytest tests/test_scoring.py -v
 ```
 
-**Test breakdown (38 tests):**
+**Test breakdown (50 tests):**
 
 | File | Tests | Coverage |
 |------|-------|----------|
@@ -722,7 +734,7 @@ python -m pytest tests/test_scoring.py -v
 | `OPENAI_API_KEY` | — | Required when `LLM_PROVIDER=openai` |
 | `OPENAI_MODEL` | `gpt-4o-mini` | OpenAI model to use |
 | `LEAD_KEYWORDS` | `embedded software engineer,...` | Comma-separated job search keywords |
-| `PREFERRED_LOCATIONS` | `Manitowoc,Wisconsin,Remote,USA` | Comma-separated preferred locations |
+| `PREFERRED_LOCATIONS` | `Sioux Falls,South Dakota,SD,Remote` | Comma-separated preferred locations |
 | `POSTS_PER_WEEK` | `3` | Target LinkedIn posts per week |
 | `CONTENT_TONE` | `professional` | Tone for generated content |
 | `LOG_LEVEL` | `INFO` | Logging level (DEBUG, INFO, WARNING, ERROR) |
