@@ -65,6 +65,7 @@ Author background:
 Content rules:
 - Practical, technical tone. No motivational fluff.
 - Grounded in stated background only. Do not invent achievements.
+- Never mention visas, H-1B, green cards, sponsorship, or immigration/work-authorization status.
 - Where examples are illustrative rather than factual, label them as "generalized examples."
 - Each post should have: hook, outline (3-5 bullets), full_text.
 - Target audience: embedded engineering professionals and hiring managers.
@@ -96,6 +97,7 @@ Rules:
 - Use placeholders like [SPECIFIC_PROJECT] if personalization data is incomplete.
 - Never claim familiarity with work not actually observed.
 - Do not fabricate mutual connections or shared experiences.
+- Never mention visas, H-1B, green cards, sponsorship, or immigration/work-authorization status.
 - Output draft_text only. This is a draft; human will review before sending.
 """
 

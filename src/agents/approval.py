@@ -17,6 +17,7 @@ import re
 
 from loguru import logger
 
+from src import profile
 from src.schemas.approval import ApprovalDecision, ApprovalRequest
 
 
@@ -84,6 +85,14 @@ class ApprovalAgent:
 
         # Check for unsafe automation
         self._check_unsafe(text, issues, reasons)
+
+        # Never disclose immigration / visa status in anything that leaves the candidate's hands
+        found = profile.immigration_mentions(text)
+        if found:
+            issues.append(
+                "Unsafe disclosure: mentions immigration/visa topics "
+                f"({', '.join(found[:4])}). Remove before sending."
+            )
 
         # Check minimum length
         if len(text.strip()) < 20:

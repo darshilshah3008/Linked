@@ -12,7 +12,7 @@ argument-hint: 'What do you want to do? (e.g. add company, change scoring, run p
 
 - **Entry point:** `python -m src <command>` or `copilot <command>` (after `pip install -e .`)
 - **Database:** SQLite at `data/app.db` (auto-created, never committed to git)
-- **Tests:** `python -m pytest tests/ -v` (50 tests)
+- **Tests:** `python -m pytest tests/ -v` (60 tests)
 - **Report:** `python generate_report_docx.py` (reads `dashboard.json`)
 
 ---
@@ -158,6 +158,8 @@ The scoring engine auto-scores based on `description_snippet` content. Higher sc
 
 Matching is whole-token via `profile.has_term()` (no "can" in "candidate"). Visa blockers (U.S. citizen, ITAR, clearance, no sponsorship) cap the score at 30 and add `BLOCKER: ...` to `missing_requirements`.
 
+**Only green card sponsors are recommended** (`data/green_card_sponsors.json`, `src/services/sponsors.py`, tiers proven/smaller/excluded). Never put visa/H-1B/green card/sponsorship wording in resumes, cover letters or outreach — the approval agent rejects it.
+
 **Candidate facts live only in `src/profile.py`.** Resume bullets, cover letters, outreach and prompts read from it.
 
 **To change scoring weights:** Edit the multipliers in `src/services/scoring.py`.  
@@ -274,7 +276,7 @@ python generate_report_docx.py
 ## Testing
 
 ```bash
-python -m pytest tests/ -v           # All 50 tests
+python -m pytest tests/ -v           # All 60 tests
 python -m pytest tests/test_scoring.py -v    # 20 scoring tests
 python -m pytest tests/test_approval.py -v   # 9 approval tests
 python -m pytest tests/test_repository.py -v # 13 repository tests

@@ -52,7 +52,7 @@ def generate_cover_letter(
         "job_title": lead_title,
         "company": company_name,
         "subject_line": subject_line,
-        "cover_letter": letter,
+        "cover_letter": profile.strip_immigration_mentions(letter),
         "key_points": key_points,
         "customization_notes": customization_notes,
     }

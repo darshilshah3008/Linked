@@ -3,10 +3,10 @@
 - Reads dashboard.json (output of `python -m src daily-plan --export`)
 - Merges fresh leads into application_tracker.csv
 - Preserves Status / Applied Date / Notes from previous version
-- Adds an "H1B Sponsor?" column based on the bundled
-  Top100_H1B_Sponsor_Companies_with_Career_Links.csv
+- Adds a "Green Card Sponsor" column from data/green_card_sponsors.json
+  (employers with recent green card / PERM filings for engineers)
 - Writes a styled application_tracker.xlsx (clickable apply links,
-  Status dropdown, color-coded Status + H1B columns)
+  Status dropdown, color-coded Status + Green Card Sponsor columns)
 
 The CSV is the canonical version (easy to edit on GitHub web UI).
 The xlsx is regenerated each run from the CSV + dashboard.
@@ -22,6 +22,9 @@ import unicodedata
 from datetime import datetime
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from src.services import sponsors as gc_sponsors  # noqa: E402
+
 TRACKER_CSV = Path("application_tracker.csv")
 TRACKER_XLSX = Path("application_tracker.xlsx")
 H1B_CSV = Path("Top100_H1B_Sponsor_Companies_with_Career_Links.csv")
@@ -30,7 +33,7 @@ COLUMNS = [
     "Title",
     "Company",
     "Location",
-    "H1B Sponsor?",
+    "Green Card Sponsor",
     "Apply Link",
     "Score",
     "Confidence",
@@ -160,7 +163,7 @@ def write_xlsx(rows: list[dict]) -> None:
 
     link_col = COLUMNS.index("Apply Link") + 1
     status_col = COLUMNS.index("Status") + 1
-    h1b_col = COLUMNS.index("H1B Sponsor?") + 1
+    h1b_col = COLUMNS.index("Green Card Sponsor") + 1
 
     for i, r in enumerate(rows, start=2):
         ws.append([r.get(c, "") for c in COLUMNS])
@@ -177,7 +180,7 @@ def write_xlsx(rows: list[dict]) -> None:
                 "solid", fgColor=status_colors[status]
             )
 
-        if (r.get("H1B Sponsor?") or "").lower() == "yes":
+        if (r.get("Green Card Sponsor") or "").lower().startswith("yes"):
             ws.cell(row=i, column=h1b_col).fill = h1b_yes_fill
 
     if rows:
@@ -210,8 +213,10 @@ def main() -> int:
     fresh = dashboard.get("top_jobs") or []
     today = datetime.utcnow().strftime("%Y-%m-%d")
 
-    sponsors = load_h1b_sponsors()
     existing = load_existing_tracker()
+    for row in existing.values():  # migrate old column + refresh labels
+        row.pop("H1B Sponsor?", None)
+        row["Green Card Sponsor"] = gc_sponsors.label(row.get("Company") or "")
 
     by_key: dict[tuple[str, str], dict] = dict(existing)
 
@@ -234,13 +239,13 @@ def main() -> int:
                 row["First Seen"] = today
             if not row.get("Status"):
                 row["Status"] = "New"
-            row["H1B Sponsor?"] = "Yes" if is_h1b_sponsor(company, sponsors) else "No"
+            row["Green Card Sponsor"] = gc_sponsors.label(company)
         else:
             by_key[key] = {
                 "Title": title,
                 "Company": company,
                 "Location": job.get("location") or "",
-                "H1B Sponsor?": "Yes" if is_h1b_sponsor(company, sponsors) else "No",
+                "Green Card Sponsor": gc_sponsors.label(company),
                 "Apply Link": job.get("url") or "",
                 "Score": str(job.get("fit_score") or ""),
                 "Confidence": job.get("confidence") or "",

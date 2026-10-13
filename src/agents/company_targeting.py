@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from loguru import logger
 
+from src.services import sponsors
 from src.db.init_db import get_session
 from src.db.repository import Repository
 from src.schemas.company import CompanyRecord
@@ -142,7 +143,7 @@ class CompanyTargetingAgent:
 
         results: list[CompanyRecord] = []
 
-        for company_name in TARGET_COMPANIES:
+        for company_name in [c for c in TARGET_COMPANIES if sponsors.allowed(c)]:
             logger.info(f"Researching target company: {company_name}")
             company_input = self.source.research(company_name)
             if company_input is None:

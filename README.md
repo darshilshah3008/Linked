@@ -203,7 +203,7 @@ job-search-copilot/
 │       ├── time_utils.py              # utcnow(), format_datetime(), days_ago()
 │       └── validators.py             # Message type & status validators
 │
-└── tests/                             # Test suite (50 tests)
+└── tests/                             # Test suite (60 tests)
     ├── __init__.py
     ├── test_scoring.py                # 10 tests — lead relevance scoring
     ├── test_approval.py               # 9 tests — approval safety checks
@@ -503,6 +503,20 @@ All matching is whole-token: `CAN` matches "CAN bus" and "CAN/J1939" but not "ca
 
 **Skill gaps** are only flagged when you don't already own the skill: e.g. AUTOSAR, UDS, XCP, LIN, Yocto, Zephyr, FPGA, Rust, DO-178C, ISO 21434.
 
+### Green Card Sponsor Targeting
+
+The copilot only recommends employers with a recent record of filing **green cards (PERM labor certifications) and H-1Bs for engineers**. The list lives in `data/green_card_sponsors.json` (about 110 embedded employers checked against DOL-derived filing data on ellis.com, with source links):
+
+| Tier | Rule | Recommended? |
+|---|---|---|
+| `proven` | 10+ PERM filings in 2024–2025 with engineering job titles | Yes |
+| `smaller` | 3–9 PERM filings in 2024–2025 (or 10+ without engineering titles) | Yes |
+| `excluded` | Fewer than 3 PERM filings in 2024–2025, or no data | No |
+
+Leads, company research, contacts, the tracker's "Green Card Sponsor" column and the daily email all apply this filter. Turn it off with `REQUIRE_GREEN_CARD_SPONSOR = False` in `src/profile.py`.
+
+**This is private targeting only.** Resumes, cover letters, outreach and LinkedIn drafts never mention visas, H-1B, green cards or sponsorship: the generators strip any such sentence and the approval agent rejects drafts that contain one.
+
 ### Candidate Profile
 
 `src/profile.py` is the single source of truth for experience, skills and resume bullets. Scoring, resume tailoring, cover letters, outreach and LLM prompts all read from it. Update it when your resume changes; never hard-code experience elsewhere.
@@ -712,7 +726,7 @@ python -m pytest tests/ --cov=src
 python -m pytest tests/test_scoring.py -v
 ```
 
-**Test breakdown (50 tests):**
+**Test breakdown (60 tests):**
 
 | File | Tests | Coverage |
 |------|-------|----------|

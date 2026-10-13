@@ -69,7 +69,7 @@ def tailor_resume_bullets(
       - skills_to_highlight: candidate skills that match those keywords
       - tailored_summary: a one-line summary pointed at this role
       - tailored_bullets: real resume bullets, most relevant first
-      - gaps_to_address: requirements the candidate may lack (incl. blockers)
+      - gaps_to_address: skill gaps only (eligibility blockers stay out of documents)
     """
     job_text = " ".join([lead_title or "", company_name or "", description_snippet or ""])
 
@@ -78,14 +78,15 @@ def tailor_resume_bullets(
     tailored_bullets = _select_bullets(job_text)
     summary_line = _generate_summary_line(lead_title, company_name, matching_skills)
 
+    gaps = [g for g in (missing_requirements or []) if not g.startswith("BLOCKER")]
     return {
         "job_title": lead_title,
         "company": company_name,
         "target_keywords": target_keywords,
         "skills_to_highlight": matching_skills,
-        "tailored_summary": summary_line,
-        "tailored_bullets": tailored_bullets,
-        "gaps_to_address": list(missing_requirements or []),
+        "tailored_summary": profile.strip_immigration_mentions(summary_line),
+        "tailored_bullets": [profile.strip_immigration_mentions(b) for b in tailored_bullets],
+        "gaps_to_address": gaps,
     }
 
 

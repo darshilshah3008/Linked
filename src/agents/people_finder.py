@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from loguru import logger
 
+from src.services import sponsors
 from src.db.init_db import get_session
 from src.db.repository import Repository
 from src.schemas.outreach import ContactRecord
@@ -83,7 +84,7 @@ class PeopleFinderAgent:
 
         all_contacts: list[ContactRecord] = []
 
-        for company in TARGET_COMPANIES:
+        for company in [c for c in TARGET_COMPANIES if sponsors.allowed(c)]:
             logger.info(f"Finding people at: {company}")
             try:
                 people = self.source.find_people(company)

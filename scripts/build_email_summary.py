@@ -49,7 +49,12 @@ def render(dashboard: dict, tracker_rows: list[dict]) -> str:
         lines.append("")
 
     # Active jobs (Status=New)
-    active = [r for r in tracker_rows if (r.get("Status") or "New").strip() == "New"]
+    # Only employers with a recent record of filing green cards for engineers.
+    active = [
+        r for r in tracker_rows
+        if (r.get("Status") or "New").strip() == "New"
+        and (r.get("Green Card Sponsor") or "").startswith("Yes")
+    ]
     if active:
         # Sort by score desc
         def s(r: dict) -> float:
@@ -62,8 +67,8 @@ def render(dashboard: dict, tracker_rows: list[dict]) -> str:
         lines.append(f"TOP {min(len(active), 10)} ACTIVE JOBS (Status=New)")
         lines.append("-" * 60)
         for i, j in enumerate(active[:10], start=1):
-            h1b = j.get("H1B Sponsor?") or "?"
-            h1b_tag = " [H1B Sponsor]" if h1b.lower() == "yes" else ""
+            gc = j.get("Green Card Sponsor") or ""
+            h1b_tag = " [GC sponsor: proven]" if gc == "Yes - proven" else " [GC sponsor: smaller]"
             lines.append(
                 f"{i:>2}. [{j.get('Score', '?')}/100, {j.get('Confidence', '?')}]{h1b_tag} "
                 f"{j.get('Title') or '?'} @ {j.get('Company') or '?'}"

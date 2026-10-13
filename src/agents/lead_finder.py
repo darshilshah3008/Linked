@@ -14,6 +14,7 @@ from src.db.init_db import get_session
 from src.db.repository import Repository
 from src.schemas.lead import LeadRecord
 from src.services.lead_sources import get_lead_sources
+from src.services import sponsors
 from src.services.scoring import score_lead
 
 
@@ -36,6 +37,7 @@ class LeadFinderAgent:
 
         keywords = self.settings.lead_keywords_list
         all_leads: list[LeadRecord] = []
+        skipped_non_sponsor = 0
 
         for source in self.sources:
             logger.info(f"Fetching leads from source: {source.source_name}")
@@ -46,6 +48,11 @@ class LeadFinderAgent:
                 continue
 
             for lead_input in raw_leads:
+                # Only keep employers with a recent record of filing green cards for engineers.
+                if not sponsors.allowed(lead_input.company):
+                    skipped_non_sponsor += 1
+                    logger.debug(f"Skipped (not a known green card sponsor): {lead_input.company}")
+                    continue
                 score_result = score_lead(lead_input)
                 logger.debug(
                     f"Scored lead: {lead_input.title} at {lead_input.company} "
@@ -75,7 +82,10 @@ class LeadFinderAgent:
         repo.log_activity(
             agent_name=self.AGENT_NAME,
             action_type="find_leads",
-            summary=f"Found {len(all_leads)} leads from {len(self.sources)} sources.",
+            summary=(
+                f"Found {len(all_leads)} leads from {len(self.sources)} sources; "
+                f"skipped {skipped_non_sponsor} from employers without a green card filing record."
+            ),
         )
 
         session.close()

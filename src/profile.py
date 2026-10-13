@@ -157,6 +157,19 @@ ACHIEVEMENTS = {
 SENIORITY_LEVEL = "II"  # Engineer II; strong for II/III/Senior, a stretch for Staff/Principal.
 NEEDS_VISA_SPONSORSHIP = True  # Flags U.S.-citizen-only / ITAR / clearance / no-sponsorship roles.
 
+# Only recommend employers with a recent record of filing green cards (PERM)
+# for engineers — see data/green_card_sponsors.json and src/services/sponsors.py.
+# This is private targeting: it is NEVER written into application documents.
+REQUIRE_GREEN_CARD_SPONSOR = True
+
+# Words that must never appear in a resume, cover letter or outreach message.
+IMMIGRATION_TERMS = [
+    "h-1b", "h1b", "h1-b", "h 1b", "green card", "greencard", "perm", "labor certification",
+    "visa", "visas", "sponsorship", "sponsor", "sponsored", "sponsoring", "immigration",
+    "work authorization", "work permit", "opt", "stem opt", "cpt", "ead", "i-140", "i-485",
+    "permanent residency", "permanent resident", "citizenship",
+]
+
 
 def headline() -> str:
     """One-line summary used in letters, outreach and prompts."""
@@ -207,3 +220,22 @@ def owns_skill(term: str) -> bool:
     """True if ``term`` is one of the candidate's owned skill aliases."""
     term = term.lower()
     return any(term in aliases for aliases in OWNED_SKILLS.values())
+
+
+def immigration_mentions(text: str) -> list[str]:
+    """Immigration/visa terms found in ``text`` (whole-token, case-insensitive)."""
+    return find_terms(text or "", IMMIGRATION_TERMS)
+
+
+def strip_immigration_mentions(text: str) -> str:
+    """Remove any sentence or bullet line that mentions immigration/visa topics."""
+    out_lines = []
+    for line in (text or "").splitlines():
+        if not immigration_mentions(line):
+            out_lines.append(line)
+            continue
+        sentences = re.split(r"(?<=[.!?])\s+", line)
+        kept = [x for x in sentences if not immigration_mentions(x)]
+        if kept:
+            out_lines.append(" ".join(kept))
+    return "\n".join(out_lines)
