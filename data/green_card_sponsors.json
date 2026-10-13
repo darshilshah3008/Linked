@@ -26,7 +26,8 @@
       "aliases": [
         "Microsoft",
         "Microsoft Corporation"
-      ]
+      ],
+      "careers_url": "https://careers.microsoft.com/us/en/search-results?keywords=embedded"
     },
     {
       "company": "Nvidia",
@@ -48,7 +49,8 @@
       "aliases": [
         "NVIDIA Corporation",
         "Nvidia"
-      ]
+      ],
+      "careers_url": "https://www.nvidia.com/en-us/about-nvidia/careers/"
     },
     {
       "company": "Intel",
@@ -70,7 +72,8 @@
       "aliases": [
         "Intel",
         "Intel Corporation"
-      ]
+      ],
+      "careers_url": "https://jobs.intel.com/Search/Results?keyword=embedded"
     },
     {
       "company": "Cisco Systems",
@@ -93,7 +96,8 @@
         "Cisco",
         "Cisco Systems",
         "Cisco Systems, Inc."
-      ]
+      ],
+      "careers_url": "https://jobs.cisco.com/"
     },
     {
       "company": "Tesla",
@@ -116,7 +120,8 @@
         "Tesla",
         "Tesla Inc",
         "Tesla, Inc."
-      ]
+      ],
+      "careers_url": "https://www.tesla.com/careers/search?keywords=embedded"
     },
     {
       "company": "Meta",
@@ -140,7 +145,8 @@
         "Meta",
         "Meta Platforms",
         "Meta Platforms, Inc."
-      ]
+      ],
+      "careers_url": "https://www.metacareers.com/jobs?keywords=embedded"
     },
     {
       "company": "Rivian",
@@ -163,7 +169,8 @@
         "Rivian",
         "Rivian Automotive",
         "Rivian Automotive, LLC"
-      ]
+      ],
+      "careers_url": "https://careers.rivian.com/"
     },
     {
       "company": "AMD",
@@ -188,7 +195,8 @@
         "Advanced Micro Devices, Inc.",
         "Xilinx",
         "Xilinx (Now AMD)"
-      ]
+      ],
+      "careers_url": "https://www.amd.com/en/corporate/careers"
     },
     {
       "company": "Cummins",
@@ -210,7 +218,8 @@
       "aliases": [
         "Cummins",
         "Cummins Inc."
-      ]
+      ],
+      "careers_url": "https://jobs.cummins.com/search-jobs?keywords=embedded"
     },
     {
       "company": "Micron Technology",
@@ -233,7 +242,8 @@
         "Micron",
         "Micron Technology",
         "Micron Technology, Inc."
-      ]
+      ],
+      "careers_url": "https://jobs.micron.com/search?keyword=embedded"
     },
     {
       "company": "Lucid Motors",
@@ -257,7 +267,8 @@
         "Lucid Motors",
         "Lucid USA",
         "Lucid USA, Inc."
-      ]
+      ],
+      "careers_url": "https://lucidgroup.icims.com/jobs/search?searchKeyword=embedded"
     },
     {
       "company": "Medtronic",
@@ -279,7 +290,8 @@
       "aliases": [
         "Medtronic",
         "Medtronic, Inc."
-      ]
+      ],
+      "careers_url": "https://jobs.medtronic.com/"
     },
     {
       "company": "Ford Motor Company",
@@ -301,7 +313,8 @@
       "aliases": [
         "Ford",
         "Ford Motor Company"
-      ]
+      ],
+      "careers_url": "https://corporate.ford.com/careers/all-jobs.html?keywords=embedded"
     },
     {
       "company": "Caterpillar",
@@ -323,7 +336,8 @@
       "aliases": [
         "Caterpillar",
         "Caterpillar Inc."
-      ]
+      ],
+      "careers_url": "https://www.caterpillar.com/en/careers.html"
     },
     {
       "company": "Amazon",
@@ -348,7 +362,8 @@
         "Amazon Lab126",
         "Amazon.com",
         "Amazon.com Services LLC"
-      ]
+      ],
+      "careers_url": "https://www.amazon.jobs/en/search?keywords=embedded+firmware&location=United%20States"
     },
     {
       "company": "Marvell Technology",
@@ -371,7 +386,8 @@
         "Marvell",
         "Marvell Semiconductor, Inc.",
         "Marvell Technology"
-      ]
+      ],
+      "careers_url": "https://marvell.wd1.myworkdayjobs.com/MarvellCareers"
     },
     {
       "company": "ARM",
@@ -395,7 +411,8 @@
         "Arm",
         "Arm Inc",
         "Arm, Inc."
-      ]
+      ],
+      "careers_url": "https://arm.wd1.myworkdayjobs.com/ARM_Careers/jobs?keywords=embedded"
     },
     {
       "company": "Western Digital",
@@ -419,7 +436,8 @@
         "Western Digital",
         "Western Digital Technologies",
         "Western Digital Technologies, Inc."
-      ]
+      ],
+      "careers_url": "https://jobs.westerndigital.com/search-jobs?keywords=embedded"
     },
     {
       "company": "Deere & Company",
@@ -442,7 +460,8 @@
         "Deere",
         "Deere & Company",
         "John Deere"
-      ]
+      ],
+      "careers_url": "https://jobs.deere.com/search-jobs?keywords=embedded"
     },
     {
       "company": "Qualcomm",
@@ -465,7 +484,8 @@
         "Qualcomm",
         "Qualcomm Technologies",
         "Qualcomm Technologies, Inc."
-      ]
+      ],
+      "careers_url": "https://jobs.qualcomm.com/search-jobs?keywords=embedded"
     },
     {
       "company": "NXP Semiconductors",
@@ -488,7 +508,8 @@
         "NXP",
         "NXP Semiconductors",
         "NXP USA, Inc."
-      ]
+      ],
+      "careers_url": "https://www.nxp.com/company/about-nxp/careers:CAREERS"
     },
     {
       "company": "Apple",
@@ -510,7 +531,8 @@
       "aliases": [
         "Apple",
         "Apple Inc"
-      ]
+      ],
+      "careers_url": "https://jobs.apple.com/en/search?keywords=embedded"
     },
     {
       "company": "Honeywell",
@@ -533,7 +555,8 @@
         "Honeywell",
         "Honeywell International",
         "Honeywell International Inc."
-      ]
+      ],
+      "careers_url": "https://careers.honeywell.com/jobs?keywords=embedded"
     },
     {
       "company": "Microchip Technology",
@@ -556,7 +579,8 @@
         "Microchip",
         "Microchip Technology",
         "Microchip Technology Inc."
-      ]
+      ],
+      "careers_url": "https://careers.microchip.com/jobsearch/"
     },
     {
       "company": "Cirrus Logic",
@@ -578,7 +602,8 @@
       "aliases": [
         "Cirrus Logic",
         "Cirrus Logic International Semiconductor Ltd. (U.S. filer; Cirrus Logic, Inc. also checked)"
-      ]
+      ],
+      "careers_url": "https://www.cirrus.com/careers/jobs"
     },
     {
       "company": "Collins Aerospace",
@@ -602,7 +627,8 @@
         "Collins Aerospace (Raytheon)",
         "Rockwell Collins",
         "Rockwell Collins, Inc. (Collins Aerospace)"
-      ]
+      ],
+      "careers_url": "https://www.rtx.com/Careers"
     },
     {
       "company": "Analog Devices",
@@ -624,7 +650,8 @@
       "aliases": [
         "Analog Devices",
         "Analog Devices, Inc."
-      ]
+      ],
+      "careers_url": "https://www.analog.com/en/about-adi/careers?keywords=embedded"
     },
     {
       "company": "Bosch",
@@ -647,7 +674,8 @@
         "Bosch",
         "Robert Bosch",
         "Robert Bosch LLC"
-      ]
+      ],
+      "careers_url": "https://www.bosch.us/careers/search/?keywords=embedded"
     },
     {
       "company": "Arista Networks",
@@ -670,7 +698,8 @@
         "Arista",
         "Arista Networks",
         "Arista Networks, Inc."
-      ]
+      ],
+      "careers_url": "https://www.arista.com/en/company/careers?keywords=embedded"
     },
     {
       "company": "Boston Scientific",
@@ -692,7 +721,8 @@
       "aliases": [
         "Boston Scientific",
         "Boston Scientific Corporation"
-      ]
+      ],
+      "careers_url": "https://jobs.bostonscientific.com/"
     },
     {
       "company": "Schneider Electric",
@@ -714,7 +744,8 @@
       "aliases": [
         "Schneider Electric",
         "Schneider Electric USA, Inc."
-      ]
+      ],
+      "careers_url": "https://careers.se.com/us-technical-careers"
     },
     {
       "company": "Zebra Technologies",
@@ -736,7 +767,8 @@
       "aliases": [
         "Zebra Technologies",
         "Zebra Technologies Corporation"
-      ]
+      ],
+      "careers_url": "https://careers.zebra.com/careers"
     },
     {
       "company": "Samsung Electronics America",
@@ -759,7 +791,8 @@
         "Samsung Electronics America",
         "Samsung Electronics America, Inc.",
         "Samsung Research America"
-      ]
+      ],
+      "careers_url": "https://sec.wd3.myworkdayjobs.com/en-US/Samsung_Careers?Location_Country=7b4fa1f369bd4604ba3692682fcbe345"
     },
     {
       "company": "Renesas Electronics America",
@@ -783,7 +816,8 @@
         "Renesas",
         "Renesas Electronics America",
         "Renesas Electronics America Inc."
-      ]
+      ],
+      "careers_url": "https://jobs.renesas.com/"
     },
     {
       "company": "Continental",
@@ -807,7 +841,8 @@
         "Aumovio Systems, Inc. f/k/a Continental Automotive Systems, Inc.",
         "Continental",
         "Continental Automotive"
-      ]
+      ],
+      "careers_url": "https://jobs-continental.icims.com/jobs/search?searchKeyword=embedded"
     },
     {
       "company": "PACCAR",
@@ -832,7 +867,8 @@
         "PACCAR Inc",
         "Paccar Inc",
         "Peterbilt"
-      ]
+      ],
+      "careers_url": "https://www.paccar.com/careers/"
     },
     {
       "company": "HL Mando America",
@@ -858,7 +894,8 @@
         "Hl Mando America",
         "Mando",
         "Mando America"
-      ]
+      ],
+      "careers_url": "https://www.hlmando.com/en/career.do"
     },
     {
       "company": "Stryker",
@@ -880,7 +917,8 @@
       "aliases": [
         "Stryker",
         "Stryker Corporation"
-      ]
+      ],
+      "careers_url": "https://careers.stryker.com/"
     },
     {
       "company": "Siemens",
@@ -903,7 +941,8 @@
         "Siemens",
         "Siemens Industry",
         "Siemens Industry, Inc."
-      ]
+      ],
+      "careers_url": "https://jobs.siemens.com/"
     },
     {
       "company": "Trimble",
@@ -925,7 +964,8 @@
       "aliases": [
         "Trimble",
         "Trimble Inc."
-      ]
+      ],
+      "careers_url": "https://www.trimble.com/en/our-company/careers"
     },
     {
       "company": "Valeo",
@@ -947,7 +987,8 @@
       "aliases": [
         "Valeo",
         "Valeo North America, Inc."
-      ]
+      ],
+      "careers_url": "https://www.valeo.com/en/careers"
     },
     {
       "company": "Volkswagen Group of America",
@@ -971,7 +1012,8 @@
         "Volkswagen",
         "Volkswagen Group of America",
         "Volkswagen Group of America, Inc. (shown as 'Volkswagen of America')"
-      ]
+      ],
+      "careers_url": "https://www.vw.com/en/careers.html"
     },
     {
       "company": "Juniper Networks",
@@ -994,7 +1036,8 @@
         "Juniper",
         "Juniper Networks",
         "Juniper Networks, Inc."
-      ]
+      ],
+      "careers_url": "https://careers.juniper.net/search-jobs?keywords=embedded"
     },
     {
       "company": "Eaton",
@@ -1016,7 +1059,8 @@
       "aliases": [
         "Eaton",
         "Eaton Corporation"
-      ]
+      ],
+      "careers_url": "https://eaton.eightfold.ai/careers"
     },
     {
       "company": "Mercedes-Benz Research & Development North America",
@@ -1041,7 +1085,8 @@
         "Mercedes-Benz Research & Development North America",
         "Mercedes-Benz Research & Development North America, Inc.",
         "Mercedes-benz Research Development North America"
-      ]
+      ],
+      "careers_url": "https://www.mbrdna.com/careers"
     },
     {
       "company": "Garmin",
@@ -1063,7 +1108,8 @@
       "aliases": [
         "Garmin",
         "Garmin International, Inc."
-      ]
+      ],
+      "careers_url": "https://careers.garmin.com/jobs"
     },
     {
       "company": "Siemens Healthineers (Varian)",
@@ -1089,7 +1135,8 @@
         "Varian",
         "Varian Medical Systems",
         "Varian Medical Systems, Inc."
-      ]
+      ],
+      "careers_url": "https://www.varian.com/about-varian/careers"
     },
     {
       "company": "Broadcom",
@@ -1111,7 +1158,8 @@
       "aliases": [
         "Broadcom",
         "Broadcom Corporation (also Avago Technologies U.S. Inc.)"
-      ]
+      ],
+      "careers_url": "https://careers.broadcom.com/jobs?keywords=embedded"
     },
     {
       "company": "CNH Industrial",
@@ -1137,7 +1185,8 @@
         "Case IH",
         "New Holland",
         "Raven Industries"
-      ]
+      ],
+      "careers_url": "https://careers.cnhindustrial.com/"
     },
     {
       "company": "Trane Technologies",
@@ -1160,7 +1209,8 @@
         "Trane",
         "Trane Technologies",
         "Trane Technologies Company LLC"
-      ]
+      ],
+      "careers_url": "https://careers.tranetechnologies.com/global/en/home"
     },
     {
       "company": "Magic Leap",
@@ -1182,7 +1232,8 @@
       "aliases": [
         "Magic Leap",
         "Magic Leap, Inc."
-      ]
+      ],
+      "careers_url": "https://job-boards.greenhouse.io/magicleap"
     },
     {
       "company": "Panasonic Corporation of North America",
@@ -1206,7 +1257,8 @@
         "Panasonic Corporation of North America",
         "Panasonic Corporation of North America (PNA)",
         "Panasonic North America"
-      ]
+      ],
+      "careers_url": "https://na.panasonic.com/us/jobs?keywords=embedded"
     },
     {
       "company": "Rockwell Automation",
@@ -1228,7 +1280,8 @@
       "aliases": [
         "Rockwell Automation",
         "Rockwell Automation, Inc."
-      ]
+      ],
+      "careers_url": "https://www.rockwellautomation.com/en-us/company/careers.html"
     },
     {
       "company": "Philips",
@@ -1252,7 +1305,8 @@
         "Philips Healthcare",
         "Philips North America",
         "Philips North America LLC"
-      ]
+      ],
+      "careers_url": "https://www.careers.philips.com/"
     },
     {
       "company": "Texas Instruments",
@@ -1275,7 +1329,8 @@
         "TI",
         "Texas Instruments",
         "Texas Instruments Incorporated"
-      ]
+      ],
+      "careers_url": "https://careers.ti.com/jobs?keywords=embedded"
     },
     {
       "company": "Daimler Truck North America",
@@ -1299,7 +1354,8 @@
         "Daimler Truck North America",
         "Daimler Truck North America, LLC",
         "Freightliner"
-      ]
+      ],
+      "careers_url": "https://dtna.wd5.myworkdayjobs.com/DTNA_external"
     },
     {
       "company": "Magna International",
@@ -1322,7 +1378,8 @@
         "Magna",
         "Magna Electronics, Inc.",
         "Magna International"
-      ]
+      ],
+      "careers_url": "https://careers.magna.com/search?keywords=embedded"
     },
     {
       "company": "Silicon Labs",
@@ -1345,7 +1402,8 @@
         "Silicon Laboratories",
         "Silicon Laboratories Inc.",
         "Silicon Labs"
-      ]
+      ],
+      "careers_url": "https://jobs.silabs.com/"
     },
     {
       "company": "Stellantis",
@@ -1368,7 +1426,8 @@
         "FCA US",
         "FCA US LLC",
         "Stellantis"
-      ]
+      ],
+      "careers_url": "https://careers.stellantis.com/job-search-results/"
     },
     {
       "company": "International Motors (Navistar)",
@@ -1392,7 +1451,8 @@
         "International Motors (Navistar)",
         "International Motors, LLC (ellis slug navistar-inc)",
         "Navistar"
-      ]
+      ],
+      "careers_url": "https://careers.international.com/"
     },
     {
       "company": "Denso",
@@ -1415,7 +1475,8 @@
         "DENSO International America",
         "Denso",
         "Denso International America, Inc."
-      ]
+      ],
+      "careers_url": "https://densocareers.com/"
     },
     {
       "company": "American Axle & Manufacturing",
@@ -1440,7 +1501,8 @@
         "American Axle & Manufacturing",
         "American Axle And Manufacturing",
         "American Axle Manufacturing Inc (AAM)"
-      ]
+      ],
+      "careers_url": "https://careers.aam.com/en/engineering-jobs"
     },
     {
       "company": "Johnson Controls",
@@ -1462,7 +1524,8 @@
       "aliases": [
         "Johnson Controls",
         "Johnson Controls, Inc."
-      ]
+      ],
+      "careers_url": "https://jobs.johnsoncontrols.com/"
     },
     {
       "company": "ZF Group",
@@ -1486,7 +1549,8 @@
         "ZF Active Safety and Electronics US, LLC",
         "ZF Friedrichshafen",
         "ZF Group"
-      ]
+      ],
+      "careers_url": "https://jobs.zf.com/search-jobs?keywords=embedded"
     },
     {
       "company": "Harman",
@@ -1510,7 +1574,8 @@
         "Harman Becker",
         "Harman Becker Automotive Systems, Inc.",
         "Harman International"
-      ]
+      ],
+      "careers_url": "https://jobsearch.harman.com/en_US/careers/SearchJobs"
     },
     {
       "company": "STMicroelectronics",
@@ -1533,7 +1598,8 @@
         "ST Microelectronics",
         "STMicroelectronics",
         "STMicroelectronics, Inc."
-      ]
+      ],
+      "careers_url": "https://www.st.com/content/st_com/en/about/careers.html"
     },
     {
       "company": "Aptiv",
@@ -1555,7 +1621,8 @@
       "aliases": [
         "Aptiv",
         "Aptiv US Services General Partnership (shown as 'Aptiv')"
-      ]
+      ],
+      "careers_url": "https://aptiv.avature.net/careers?keyword=embedded"
     },
     {
       "company": "ICU Medical",
@@ -1577,7 +1644,8 @@
       "aliases": [
         "ICU Medical",
         "ICU Medical, Inc."
-      ]
+      ],
+      "careers_url": "https://www.icumed.com/careers"
     },
     {
       "company": "Samsung Semiconductor",
@@ -1599,7 +1667,8 @@
       "aliases": [
         "Samsung Semiconductor",
         "Samsung Semiconductor, Inc."
-      ]
+      ],
+      "careers_url": "https://semiconductor.samsung.com/us/careers/search?keyword=embedded"
     },
     {
       "company": "Seagate Technology",
@@ -1622,7 +1691,8 @@
         "Seagate",
         "Seagate Technology",
         "Seagate US LLC"
-      ]
+      ],
+      "careers_url": "https://jobs.seagate.com/search-jobs?keywords=embedded"
     },
     {
       "company": "Lear",
@@ -1644,7 +1714,8 @@
       "aliases": [
         "Lear",
         "Lear Corporation"
-      ]
+      ],
+      "careers_url": "https://jobs.lear.com/go/United-States/4239001/"
     },
     {
       "company": "Parker Hannifin",
@@ -1666,7 +1737,8 @@
       "aliases": [
         "Parker Hannifin",
         "Parker Hannifin Corporation"
-      ]
+      ],
+      "careers_url": "https://www.parker.com/careers"
     },
     {
       "company": "Sensata Technologies",
@@ -1688,7 +1760,8 @@
       "aliases": [
         "Sensata Technologies",
         "Sensata Technologies, Inc."
-      ]
+      ],
+      "careers_url": "https://sensata.wd1.myworkdayjobs.com/Sensata-Careers/jobs"
     },
     {
       "company": "Daikin Comfort Technologies",
@@ -1712,7 +1785,8 @@
         "Daikin Comfort Technologies",
         "Daikin Comfort Technologies Manufacturing",
         "Daikin Comfort Technologies Manufacturing, L.P."
-      ]
+      ],
+      "careers_url": "https://careers.daikincomfort.com/"
     },
     {
       "company": "Infineon Technologies",
@@ -1735,7 +1809,8 @@
         "Infineon",
         "Infineon Technologies",
         "Infineon Technologies Americas Corp."
-      ]
+      ],
+      "careers_url": "https://infineon.wd3.myworkdayjobs.com/infineonexternal?keywords=embedded"
     },
     {
       "company": "ABB",
@@ -1757,7 +1832,8 @@
       "aliases": [
         "ABB",
         "ABB Inc."
-      ]
+      ],
+      "careers_url": "https://careers.abb/global/en/search-results?keywords=embedded"
     },
     {
       "company": "GE HealthCare",
@@ -1782,7 +1858,8 @@
         "GE Precision Healthcare",
         "GE Precision Healthcare LLC",
         "Ge Precision Healthcare"
-      ]
+      ],
+      "careers_url": "https://careers.gehealthcare.com/global/en/science-and-technology-jobs"
     },
     {
       "company": "Boeing",
@@ -1804,7 +1881,8 @@
       "aliases": [
         "Boeing",
         "The Boeing Company"
-      ]
+      ],
+      "careers_url": "https://jobs.boeing.com/search-jobs?keywords=embedded"
     },
     {
       "company": "Hitachi",
@@ -1827,7 +1905,8 @@
         "Hitachi",
         "Hitachi Energy",
         "Hitachi Energy USA Inc."
-      ]
+      ],
+      "careers_url": "https://www.hitachi.com/careers/search?keyword=embedded"
     },
     {
       "company": "Synaptics",
@@ -1849,7 +1928,8 @@
       "aliases": [
         "Synaptics",
         "Synaptics Incorporated"
-      ]
+      ],
+      "careers_url": "https://careers.synaptics.com/jobs?keywords=embedded"
     },
     {
       "company": "Logitech",
@@ -1872,7 +1952,8 @@
         "Logitech",
         "Logitech Inc",
         "Logitech Inc."
-      ]
+      ],
+      "careers_url": "https://logitech.wd5.myworkdayjobs.com/Logitech"
     },
     {
       "company": "Danfoss",
@@ -1894,7 +1975,8 @@
       "aliases": [
         "Danfoss",
         "Danfoss Power Solutions (US) Company (also Danfoss, LLC)"
-      ]
+      ],
+      "careers_url": "https://www.danfoss.com/en-us/about-danfoss/careers/"
     },
     {
       "company": "Danlaw",
@@ -1916,7 +1998,8 @@
       "aliases": [
         "Danlaw",
         "Danlaw, Inc."
-      ]
+      ],
+      "careers_url": "https://danlawtechnologies.com/careers"
     },
     {
       "company": "Emerson Electric",
@@ -1940,7 +2023,8 @@
         "Emerson Electric",
         "Fisher-Rosemount",
         "Fisher-Rosemount Systems, Inc. (Emerson subsidiary)"
-      ]
+      ],
+      "careers_url": "https://www.emerson.com/en-us/careers/career-opportunities"
     },
     {
       "company": "AGCO Corporation",
@@ -1963,7 +2047,8 @@
         "AGCO",
         "AGCO Corporation",
         "Fendt"
-      ]
+      ],
+      "careers_url": "https://careers.agcocorp.com/"
     },
     {
       "company": "Polaris",
@@ -1986,7 +2071,8 @@
         "Polaris",
         "Polaris Inc",
         "Polaris Industries, Inc."
-      ]
+      ],
+      "careers_url": "https://polaris.wd5.myworkdayjobs.com/PolarisJobs"
     },
     {
       "company": "Ciena",
@@ -2008,7 +2094,8 @@
       "aliases": [
         "Ciena",
         "Ciena Corporation"
-      ]
+      ],
+      "careers_url": "https://ciena.wd5.myworkdayjobs.com/en-US/Careers"
     },
     {
       "company": "Sony",
@@ -2031,7 +2118,8 @@
         "Sony",
         "Sony Electronics",
         "Sony Electronics Inc. (Sony Corporation of America also checked)"
-      ]
+      ],
+      "careers_url": "https://careers.sony.net/job-search?keywords=embedded"
     },
     {
       "company": "The Toro Company",
@@ -2053,7 +2141,8 @@
       "aliases": [
         "The Toro Company",
         "Toro"
-      ]
+      ],
+      "careers_url": "https://jobs.thetorocompany.com/search-jobs"
     },
     {
       "company": "iRobot",
@@ -2075,7 +2164,8 @@
       "aliases": [
         "iRobot",
         "iRobot Corporation"
-      ]
+      ],
+      "careers_url": "https://irobot.taleo.net/careersection/2/jobsearch.ftl?keyword=embedded"
     },
     {
       "company": "Allison Transmission",
@@ -2097,7 +2187,8 @@
       "aliases": [
         "Allison Transmission",
         "Allison Transmission, Inc."
-      ]
+      ],
+      "careers_url": null
     },
     {
       "company": "Nexteer Automotive",
@@ -2119,7 +2210,8 @@
       "aliases": [
         "Nexteer Automotive",
         "Nexteer Automotive Corporation"
-      ]
+      ],
+      "careers_url": "https://jobs.nexteer.com/go/View-All-Jobs/4349100/"
     },
     {
       "company": "Mitsubishi Electric",
@@ -2141,7 +2233,8 @@
       "aliases": [
         "Mitsubishi Electric",
         "Mitsubishi Electric Automotive America, Inc."
-      ]
+      ],
+      "careers_url": "https://www.mitsubishielectric.com/en/about/careers/"
     },
     {
       "company": "GE Aerospace",
@@ -2164,7 +2257,8 @@
         "GE Aerospace",
         "GE Aviation",
         "GE Aviation Systems LLC (also checked General Electric Company)"
-      ]
+      ],
+      "careers_url": "https://jobs.gecareers.com/jobs?keywords=embedded"
     },
     {
       "company": "L3Harris Technologies",
@@ -2187,7 +2281,8 @@
         "L3Harris",
         "L3Harris Technologies",
         "L3Harris Technologies Inc"
-      ]
+      ],
+      "careers_url": "https://careers.l3harris.com/"
     },
     {
       "company": "RTX (Raytheon)",
@@ -2212,7 +2307,8 @@
         "RTX Corporation (Raytheon Company also checked)",
         "Raytheon",
         "Raytheon Technologies"
-      ]
+      ],
+      "careers_url": "https://www.rtx.com/careers/job-search?keywords=embedded"
     },
     {
       "company": "Volvo Group North America",
@@ -2236,7 +2332,8 @@
         "Volvo Group",
         "Volvo Group North America",
         "Volvo Group North America, LLC"
-      ]
+      ],
+      "careers_url": null
     },
     {
       "company": "General Motors",
@@ -2259,7 +2356,8 @@
         "GM",
         "General Motors",
         "General Motors (no legal suffix shown)"
-      ]
+      ],
+      "careers_url": "https://search-careers.gm.com/search-jobs?keywords=embedded"
     },
     {
       "company": "Visteon",
@@ -2281,7 +2379,8 @@
       "aliases": [
         "Visteon",
         "Visteon Corporation"
-      ]
+      ],
+      "careers_url": null
     },
     {
       "company": "Carrier",
@@ -2303,7 +2402,8 @@
       "aliases": [
         "Carrier",
         "Carrier Corporation"
-      ]
+      ],
+      "careers_url": null
     },
     {
       "company": "Google",
@@ -2326,7 +2426,8 @@
         "Alphabet",
         "Google",
         "Google LLC"
-      ]
+      ],
+      "careers_url": "https://careers.google.com/jobs/results/?q=embedded&location=United%20States"
     },
     {
       "company": "Oshkosh Corporation",
@@ -2351,7 +2452,8 @@
         "Oshkosh Corporation",
         "Oshkosh Corporation (also checked JLG Industries, Oshkosh Defense LLC)",
         "Pierce Manufacturing"
-      ]
+      ],
+      "careers_url": "https://oshkoshcorporation.jobs/"
     },
     {
       "company": "Kubota",
@@ -2373,7 +2475,8 @@
       "aliases": [
         "Kubota",
         "Kubota North America Corporation (also checked Kubota Manufacturing of America Corp)"
-      ]
+      ],
+      "careers_url": null
     },
     {
       "company": "Vermeer",
@@ -2395,7 +2498,8 @@
       "aliases": [
         "Vermeer",
         "Vermeer Manufacturing Company"
-      ]
+      ],
+      "careers_url": null
     },
     {
       "company": "Doosan Bobcat",
@@ -2419,7 +2523,8 @@
         "Bobcat Company",
         "Doosan Bobcat",
         "Doosan Bobcat North America, Inc."
-      ]
+      ],
+      "careers_url": null
     },
     {
       "company": "BorgWarner",
@@ -2441,7 +2546,8 @@
       "aliases": [
         "BorgWarner",
         "BorgWarner, Inc. (also checked BorgWarner Technologies Services LLC, BorgWarner Turbo Systems LLC)"
-      ]
+      ],
+      "careers_url": null
     },
     {
       "company": "Northrop Grumman",
@@ -2463,7 +2569,8 @@
       "aliases": [
         "Northrop Grumman",
         "not found (tried Northrop Grumman Systems Corporation / Corporation)"
-      ]
+      ],
+      "careers_url": "https://www.northropgrumman.com/careers/job-search?searchTerm=embedded"
     },
     {
       "company": "Lockheed Martin",
@@ -2486,7 +2593,8 @@
         "Lockheed",
         "Lockheed Martin",
         "Lockheed Martin Corporation"
-      ]
+      ],
+      "careers_url": "https://jobs.lockheedmartin.com/search-jobs?keywords=embedded"
     },
     {
       "company": "Boston Dynamics",
@@ -2508,7 +2616,8 @@
       "aliases": [
         "Boston Dynamics",
         "Boston Dynamics, Inc."
-      ]
+      ],
+      "careers_url": "https://jobs.smartrecruiters.com/BostonDynamics?keywords=embedded"
     }
   ]
 }
