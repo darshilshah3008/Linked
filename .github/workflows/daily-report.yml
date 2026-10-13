@@ -2,7 +2,7 @@ name: Daily Job Search Copilot Report
 
 on:
   schedule:
-    # 13:00 UTC daily. Edit to change the time. https://crontab.guru
+    # 01:30 UTC daily (about 8:30 pm US Central). Edit to change the time. https://crontab.guru
     - cron: "30 1 * * *"
   workflow_dispatch: {}
 
@@ -82,9 +82,9 @@ jobs:
           server_address: smtp.gmail.com
           server_port: 465
           secure: true
-          username: ${{ secrets.MAIL_USERNAME }}
-          password: ${{ secrets.MAIL_PASSWORD }}
-          from: Job Search Copilot <${{ secrets.MAIL_USERNAME }}>
+          username: ${{ secrets.SMTP_USER }}
+          password: ${{ secrets.SMTP_PASS }}
+          from: Job Search Copilot <${{ secrets.SMTP_USER }}>
           to: darshilshah3008@gmail.com
           subject: "Job Search Copilot - Daily Report ${{ steps.meta.outputs.date }}"
           body: file://email_body.txt
