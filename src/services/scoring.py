@@ -295,20 +295,63 @@ def _score_seniority(title: str) -> tuple[float, str]:
     return 0.8, "level not stated"
 
 
+US_STATE_CODES = {
+    "al", "ak", "az", "ar", "ca", "co", "ct", "de", "fl", "ga", "hi", "id", "il", "in", "ia",
+    "ks", "ky", "la", "me", "md", "ma", "mi", "mn", "ms", "mo", "mt", "ne", "nv", "nh", "nj",
+    "nm", "ny", "nc", "nd", "oh", "ok", "or", "pa", "ri", "sc", "sd", "tn", "tx", "ut", "vt",
+    "va", "wa", "wv", "wi", "wy", "dc",
+}
+US_STATE_NAMES = [
+    "alabama", "alaska", "arizona", "arkansas", "california", "colorado", "connecticut",
+    "delaware", "florida", "georgia", "hawaii", "idaho", "illinois", "indiana", "iowa",
+    "kansas", "kentucky", "louisiana", "maine", "maryland", "massachusetts", "michigan",
+    "minnesota", "mississippi", "missouri", "montana", "nebraska", "nevada", "new hampshire",
+    "new jersey", "new mexico", "new york", "north carolina", "north dakota", "ohio",
+    "oklahoma", "oregon", "pennsylvania", "rhode island", "south carolina", "south dakota",
+    "tennessee", "texas", "utah", "vermont", "virginia", "washington", "west virginia",
+    "wisconsin", "wyoming",
+]
+US_COUNTRY_TERMS = ["usa", "u.s.", "u.s.a.", "united states", "us"]
+# A preference entry that means "anywhere in the United States".
+US_WIDE_PREFS = {"united states", "usa", "us", "u.s.", "anywhere in us", "anywhere in usa"}
+
+
+def is_us_location(location: str) -> bool:
+    """True if the location string is in the United States (city, ST / state name / USA)."""
+    loc = location.lower()
+    if find_terms(loc, US_COUNTRY_TERMS) or find_terms(loc, US_STATE_NAMES):
+        return True
+    # State code as the last comma-separated part, e.g. "Peoria, IL" or "Remote - TX".
+    tail = loc.replace(" - ", ",").split(",")[-1].strip().strip(".")
+    return tail in US_STATE_CODES
+
+
 def _score_location(location: str | None) -> float:
-    """Return 0-1 location fit. Preferred > remote > elsewhere in the U.S. (open to relocating)."""
+    """Return 0-1 location fit.
+
+    With PREFERRED_LOCATIONS containing "United States" (the default), every U.S.
+    location and U.S. remote role is a full match. Specific cities or states can
+    still be listed instead to narrow the search. Roles outside the U.S. score low.
+    """
     if location is None:
         return 0.3
 
     settings = get_settings()
+    prefs = [p.strip().lower() for p in settings.preferred_locations_list]
     loc_lower = location.lower()
-    for pref in settings.preferred_locations_list:
-        if pref.lower() in ("remote",):
+    us = is_us_location(location)
+
+    if us and any(p in US_WIDE_PREFS for p in prefs):
+        return 1.0
+    for pref in prefs:
+        if pref in US_WIDE_PREFS or pref == "remote":
             continue
         if has_term(loc_lower, pref):
             return 1.0
     if "remote" in loc_lower:
-        return 0.9
-    if "hybrid" in loc_lower:
-        return 0.6
-    return 0.5
+        if us:
+            return 1.0 if "remote" in prefs else 0.9
+        return 0.9 if not find_terms(loc_lower, ["canada", "india", "germany", "uk", "mexico", "europe"]) else 0.2
+    if us:
+        return 0.6 if "hybrid" in loc_lower else 0.5
+    return 0.2

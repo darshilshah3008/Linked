@@ -41,8 +41,11 @@ class Settings(BaseSettings):
 
     # Location
     preferred_locations: str = Field(
-        default="Sioux Falls,South Dakota,SD,Remote",
-        description="Comma-separated preferred locations",
+        default="United States,Remote",
+        description=(
+            "Comma-separated preferred locations. 'United States' = any U.S. city, state or "
+            "U.S. remote role; list specific cities/states instead to narrow it."
+        ),
     )
 
     # Content

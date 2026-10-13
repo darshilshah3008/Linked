@@ -57,18 +57,16 @@ class TestScoreLead:
         assert score_senior > score_intern
 
     def test_location_match(self):
-        lead_pref = _make_lead(
-            title="Embedded Software Engineer",
-            location="Sioux Falls, SD",
-            description_snippet="CAN bus, embedded controls",
-        )
-        lead_ca = _make_lead(
-            title="Embedded Software Engineer",
-            location="San Francisco, CA",
-        )
-        score_pref = score_lead(lead_pref).score
-        score_ca = score_lead(lead_ca).score
-        assert score_pref > score_ca
+        lead_us = _make_lead(title="Embedded Software Engineer", location="Peoria, IL")
+        lead_abroad = _make_lead(title="Embedded Software Engineer", location="Munich, Germany")
+        assert score_lead(lead_us).score > score_lead(lead_abroad).score
+
+    def test_any_us_location_is_full_marks(self):
+        a = score_lead(_make_lead(title="Embedded Software Engineer", location="Sioux Falls, SD")).score
+        b = score_lead(_make_lead(title="Embedded Software Engineer", location="San Jose, CA")).score
+        c = score_lead(_make_lead(title="Embedded Software Engineer", location="Detroit, Michigan")).score
+        d = score_lead(_make_lead(title="Embedded Software Engineer", location="Remote, USA")).score
+        assert a == b == c == d
 
     def test_remote_location_scores_well(self):
         lead = _make_lead(

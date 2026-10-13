@@ -154,7 +154,7 @@ The scoring engine auto-scores based on `description_snippet` content. Higher sc
 | Stack match | 20 | Owned skills from `src/profile.py` (CAN/CAN FD/J1939/ISOBUS, Embedded C/C++, FreeRTOS, Simulink, CAPL, HIL...), 4+ hits = full |
 | Industry | 20 | Tier 1 ag / off-highway / vehicle = full; tier 2 industrial / robotics / aerospace / medical = 60% |
 | Seniority | 15 | Engineer II: II/III/Senior=1.0, unstated=0.8, Staff/Lead=0.5, Engineer I=0.4, intern=0.1 |
-| Location | 10 | Preferred (Sioux Falls/SD)=1.0, Remote=0.9, Hybrid=0.6, elsewhere in U.S.=0.5 |
+| Location | 10 | Any U.S. location or U.S. remote=1.0 (`PREFERRED_LOCATIONS=United States`), not stated=0.3, outside U.S.=0.2 |
 
 Matching is whole-token via `profile.has_term()` (no "can" in "candidate"). Visa blockers (U.S. citizen, ITAR, clearance, no sponsorship) cap the score at 30 and add `BLOCKER: ...` to `missing_requirements`.
 

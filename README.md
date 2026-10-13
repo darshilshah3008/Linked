@@ -268,7 +268,7 @@ LLM_PROVIDER=mock
 
 # Job Search Profile
 LEAD_KEYWORDS=embedded software engineer,firmware engineer,embedded systems,ECU software,CAN FD,J1939,ISOBUS,precision agriculture
-PREFERRED_LOCATIONS=Sioux Falls,South Dakota,SD,Remote
+PREFERRED_LOCATIONS=United States,Remote
 
 # Content Strategy
 POSTS_PER_WEEK=3
@@ -495,7 +495,7 @@ Every job lead is scored on a **deterministic 0-100 scale** (no ML or opaque mod
 | **Stack Match** | 20 | Embedded stack you actually have (from `src/profile.py`): CAN / CAN FD / J1939 / ISOBUS, Embedded C/C++, FreeRTOS, Simulink / Stateflow / Embedded Coder, CAPL / CANalyzer, HIL, ISO 26262, MISRA... Scales with distinct hits (4+ = full) |
 | **Industry Match** | 20 | Tier 1 (full): precision ag, agriculture, off-highway, commercial vehicle, automotive, hydraulics. Tier 2 (60%): industrial, robotics, aerospace, medical device, EV/BMS, semiconductor |
 | **Seniority Fit** | 15 | Tuned for an Engineer II: `II`/`III`/`Senior` = 100%, unstated = 80%, `Staff`/`Principal`/`Lead` = 50%, `Junior`/`Engineer I` = 40%, intern/co-op = 10% |
-| **Location Fit** | 10 | `PREFERRED_LOCATIONS` = 100%, remote = 90%, hybrid = 60%, elsewhere in the U.S. = 50% (open to relocation) |
+| **Location Fit** | 10 | Anywhere in the United States (default `PREFERRED_LOCATIONS=United States,Remote`) or U.S. remote = 100%, location not stated = 30%, outside the U.S. = 20% |
 
 All matching is whole-token: `CAN` matches "CAN bus" and "CAN/J1939" but not "candidate" or "Canada"; `BLE` does not match "responsible".
 
@@ -518,12 +518,12 @@ Each scored lead includes:
 
 ### Example
 
-A "Senior Embedded Software Engineer" at Deere & Company mentioning CAN/J1939, FreeRTOS and C/C++ for agricultural equipment in Moline, IL scores **95/100** (high confidence):
+A "Senior Embedded Software Engineer" at Deere & Company mentioning CAN/J1939, FreeRTOS and C/C++ for agricultural equipment in Moline, IL scores **100/100** (high confidence):
 - Title: 35/35 ("embedded")
 - Stack: 20/20 (CAN, J1939, FreeRTOS, C/C++)
 - Industry: 20/20 (agricultural)
 - Seniority: 15/15 (senior)
-- Location: 5/10 (elsewhere in the U.S.)
+- Location: 10/10 (inside the United States)
 
 The same posting with "Must be a U.S. citizen (ITAR)" is capped at 30 with `BLOCKER: U.S. citizenship required`.
 
@@ -734,7 +734,7 @@ python -m pytest tests/test_scoring.py -v
 | `OPENAI_API_KEY` | — | Required when `LLM_PROVIDER=openai` |
 | `OPENAI_MODEL` | `gpt-4o-mini` | OpenAI model to use |
 | `LEAD_KEYWORDS` | `embedded software engineer,...` | Comma-separated job search keywords |
-| `PREFERRED_LOCATIONS` | `Sioux Falls,South Dakota,SD,Remote` | Comma-separated preferred locations |
+| `PREFERRED_LOCATIONS` | `United States,Remote` | Comma-separated preferred locations. `United States` = anywhere in the U.S. (any city, state or U.S. remote role); list cities/states instead to narrow it |
 | `POSTS_PER_WEEK` | `3` | Target LinkedIn posts per week |
 | `CONTENT_TONE` | `professional` | Tone for generated content |
 | `LOG_LEVEL` | `INFO` | Logging level (DEBUG, INFO, WARNING, ERROR) |
