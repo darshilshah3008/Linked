@@ -7,6 +7,10 @@ Returns structured results with explainability.
 
 from __future__ import annotations
 
+import json
+from datetime import datetime, timezone
+from pathlib import Path
+
 from loguru import logger
 
 from src.config import get_settings
@@ -16,6 +20,10 @@ from src.schemas.lead import LeadRecord
 from src.services.lead_sources import get_lead_sources
 from src.services import sponsors
 from src.services.scoring import score_lead
+
+
+# Written after every run so the daily email can say what the live search returned.
+LEAD_RUN_STATUS = Path("data/last_lead_run.json")
 
 
 class LeadFinderAgent:
@@ -38,6 +46,8 @@ class LeadFinderAgent:
         keywords = self.settings.lead_keywords_list
         all_leads: list[LeadRecord] = []
         skipped_non_sponsor = 0
+        fetched = 0
+        errors: list[str] = []
 
         for source in self.sources:
             logger.info(f"Fetching leads from source: {source.source_name}")
@@ -45,7 +55,10 @@ class LeadFinderAgent:
                 raw_leads = source.fetch_leads(keywords)
             except Exception as e:
                 logger.error(f"Error fetching from {source.source_name}: {e}")
+                errors.append(f"{source.source_name}: {e}")
                 continue
+            fetched += len(raw_leads)
+            errors.extend(f"{source.source_name}: {m}" for m in getattr(source, "errors", []))
 
             for lead_input in raw_leads:
                 # Only keep employers with a recent record of filing green cards for engineers.
@@ -89,6 +102,27 @@ class LeadFinderAgent:
         )
 
         session.close()
+
+        status = {
+            "time_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "sources": [src.source_name for src in self.sources],
+            "postings_fetched": fetched,
+            "kept_green_card_sponsors": len(all_leads),
+            "skipped_non_sponsors": skipped_non_sponsor,
+            "errors": errors[:10],
+        }
+        try:
+            LEAD_RUN_STATUS.parent.mkdir(parents=True, exist_ok=True)
+            LEAD_RUN_STATUS.write_text(json.dumps(status, indent=2), encoding="utf-8")
+        except OSError as e:
+            logger.warning(f"Could not write lead run status: {e}")
+        print(
+            f"[lead_finder] sources={status['sources']} fetched={fetched} "
+            f"kept={len(all_leads)} skipped_non_sponsors={skipped_non_sponsor} errors={len(errors)}",
+            flush=True,
+        )
+        for e in errors[:5]:
+            print(f"[lead_finder] ERROR {e}", flush=True)
 
         all_leads.sort(key=lambda x: x.relevance_score, reverse=True)
         return all_leads[:limit]

@@ -12,6 +12,7 @@ from datetime import datetime, timezone
 
 from loguru import logger
 
+from src.services import sponsors
 from src.agents.company_targeting import CompanyTargetingAgent
 from src.agents.content_agent import ContentAgent
 from src.agents.lead_finder import LeadFinderAgent
@@ -153,6 +154,8 @@ class OrchestratorAgent:
 
         top_jobs = []
         for lead in leads:
+            if not sponsors.allowed(lead.company):
+                continue
             top_jobs.append({
                 "title": lead.title,
                 "company": lead.company,

@@ -214,6 +214,8 @@ def main() -> int:
     today = datetime.utcnow().strftime("%Y-%m-%d")
 
     existing = load_existing_tracker()
+    for key in [k for k, r in existing.items() if not (r.get("Title") or "").strip()]:
+        del existing[key]  # drop junk rows with no job title
     for row in existing.values():  # migrate old column + refresh labels
         row.pop("H1B Sponsor?", None)
         row["Green Card Sponsor"] = gc_sponsors.label(row.get("Company") or "")
@@ -263,6 +265,11 @@ def main() -> int:
             score = 0.0
         status_idx = STATUS_ORDER.get((r.get("Status") or "New"), 0)
         return (status_idx, score)
+
+    # Every row gets a link: the job posting when we have one, else the company's careers page.
+    for r in by_key.values():
+        if not (r.get("Apply Link") or "").strip():
+            r["Apply Link"] = gc_sponsors.careers_url(r.get("Company") or "") or ""
 
     rows = sorted(by_key.values(), key=sort_key)
 

@@ -15,6 +15,9 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from src.services import sponsors as gc_sponsors  # noqa: E402
+
 
 def read_tracker(path: Path) -> list[dict]:
     if not path.exists():
@@ -42,6 +45,23 @@ def render(dashboard: dict, tracker_rows: list[dict]) -> str:
         lines.append("Tip: edit application_tracker.csv on GitHub and set Status=Applied")
         lines.append("     to remove a job from tomorrow's email.")
         lines.append("")
+
+    status_file = Path("data/last_lead_run.json")
+    if status_file.exists():
+        try:
+            st = json.loads(status_file.read_text(encoding="utf-8"))
+            lines.append(
+                f"Live job search: {st.get('postings_fetched', 0)} postings found, "
+                f"{st.get('kept_green_card_sponsors', 0)} at green card sponsors."
+            )
+            if not st.get("postings_fetched"):
+                lines.append("WARNING: the live job search returned nothing today, so no new jobs were added.")
+                for e in (st.get("errors") or [])[:3]:
+                    lines.append(f"   - {e[:200]}")
+                lines.append("   Check the SERPER_API_KEY secret and your Serper.dev credits.")
+            lines.append("")
+        except (OSError, ValueError):
+            pass
 
     summary = dashboard.get("summary") or ""
     if summary:
@@ -75,8 +95,14 @@ def render(dashboard: dict, tracker_rows: list[dict]) -> str:
             )
             loc = j.get("Location") or "?"
             lines.append(f"     Location: {loc}")
-            url = j.get("Apply Link") or "(no URL)"
-            lines.append(f"     Apply: {url}")
+            url = (j.get("Apply Link") or "").strip()
+            careers = gc_sponsors.careers_url(j.get("Company") or "")
+            if url and url != careers:
+                lines.append(f"     Apply: {url}")
+            elif careers:
+                lines.append(f"     Apply (careers page - search the title): {careers}")
+            else:
+                lines.append("     Apply: (no link found)")
         lines.append("")
     else:
         # Fallback to dashboard.json's top_jobs (e.g. before tracker exists)
@@ -90,7 +116,8 @@ def render(dashboard: dict, tracker_rows: list[dict]) -> str:
                     f"{job.get('title','?')} @ {job.get('company','?')}"
                 )
                 lines.append(f"     Location: {job.get('location','?')}")
-                lines.append(f"     Apply: {job.get('url') or '(no URL)'}")
+                link = job.get("url") or gc_sponsors.careers_url(job.get("company") or "") or "(no link found)"
+                lines.append(f"     Apply: {link}")
             lines.append("")
 
     # Top contacts

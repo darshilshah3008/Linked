@@ -112,3 +112,9 @@ def label(company: str) -> str:
 def recommended_companies() -> list[dict]:
     companies, _ = _load()
     return [c for c in companies if c["tier"] in RECOMMENDED_TIERS]
+
+
+def careers_url(company: str) -> str | None:
+    """Company careers / job-search page from the sponsor list (fallback apply link)."""
+    rec = lookup(company)
+    return rec.get("careers_url") if rec else None

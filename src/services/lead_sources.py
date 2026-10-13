@@ -11,6 +11,8 @@ from __future__ import annotations
 
 import os
 
+import httpx
+
 from abc import ABC, abstractmethod
 
 from src.schemas.lead import LeadInput
@@ -677,9 +679,14 @@ class SerperJobSearchAdapter(LeadSource):
     def source_name(self) -> str:
         return "serper_google_jobs"
 
+    def __init__(self) -> None:
+        self.errors: list[str] = []
+
     def fetch_leads(self, keywords: list[str], location: str | None = None) -> list[LeadInput]:
+        self.errors = []
         api_key = os.getenv("SERPER_API_KEY")
         if not api_key:
+            self.errors.append("SERPER_API_KEY is not set")
             return []
 
         max_queries = int(os.getenv("SERPER_MAX_QUERIES", "4"))
@@ -705,7 +712,9 @@ class SerperJobSearchAdapter(LeadSource):
                 response.raise_for_status()
                 data = response.json()
             except Exception as e:
-                print(f"[SerperJobSearchAdapter] query '{q}' failed: {e}", flush=True)
+                msg = f"query '{q}' failed: {e}"
+                print(f"[SerperJobSearchAdapter] {msg}", flush=True)
+                self.errors.append(msg)
                 continue
 
             for job in (data.get("jobs") or [])[:results_per_query]:

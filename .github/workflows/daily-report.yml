@@ -36,9 +36,6 @@ jobs:
           pip install -r requirements.txt
           pip install "openai>=1.0" openpyxl
 
-      - name: Seed database
-        run: python -m src seed
-
       - name: Find leads (live via Serper Google Jobs)
         run: python -m src find-leads --limit 30
 

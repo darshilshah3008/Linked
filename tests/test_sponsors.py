@@ -67,3 +67,30 @@ def test_resume_tailoring_never_mentions_visa():
 def test_strip_removes_only_offending_sentences():
     text = "I build CAN stacks. I require H-1B transfer. I love controls."
     assert profile.strip_immigration_mentions(text) == "I build CAN stacks. I love controls."
+
+
+def test_serper_adapter_parses_jobs_and_records_errors(monkeypatch):
+    """The live search must actually call the API (it once crashed on a missing import)."""
+    from src.services import lead_sources
+
+    class Resp:
+        def raise_for_status(self):
+            pass
+
+        def json(self):
+            return {"jobs": [{"title": "Embedded Software Engineer", "company_name": "John Deere",
+                              "location": "Moline, IL", "link": "https://example.com/job/1",
+                              "description": "CAN, J1939, embedded C"}]}
+
+    monkeypatch.setenv("SERPER_API_KEY", "test")
+    monkeypatch.setenv("SERPER_MAX_QUERIES", "1")
+    monkeypatch.setattr(lead_sources.httpx, "post", lambda *a, **k: Resp())
+    adapter = lead_sources.SerperJobSearchAdapter()
+    leads = adapter.fetch_leads(["embedded software engineer"])
+    assert adapter.errors == []
+    assert leads and leads[0].url == "https://example.com/job/1"
+
+
+def test_tracker_fallback_link_is_careers_page():
+    assert sponsors.careers_url("John Deere").startswith("https://")
+    assert sponsors.careers_url("Acme Robotics") is None
