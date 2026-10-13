@@ -41,10 +41,10 @@ class Settings(BaseSettings):
 
     # Location
     preferred_locations: str = Field(
-        default="United States,Remote",
+        default="United States",
         description=(
-            "Comma-separated preferred locations. 'United States' = any U.S. city, state or "
-            "U.S. remote role; list specific cities/states instead to narrow it."
+            "Comma-separated preferred locations. 'United States' = any U.S. city or state "
+            "(open to relocation); add 'Remote' to score remote roles as full matches."
         ),
     )
 

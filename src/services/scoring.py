@@ -329,8 +329,9 @@ def is_us_location(location: str) -> bool:
 def _score_location(location: str | None) -> float:
     """Return 0-1 location fit.
 
-    With PREFERRED_LOCATIONS containing "United States" (the default), every U.S.
-    location and U.S. remote role is a full match. Specific cities or states can
+    With PREFERRED_LOCATIONS = "United States" (the default), every on-site or hybrid
+    role anywhere in the U.S. is a full match, because the candidate will relocate.
+    Remote roles score 90% unless "Remote" is added to PREFERRED_LOCATIONS. Specific cities or states can
     still be listed instead to narrow the search. Roles outside the U.S. score low.
     """
     if location is None:
@@ -341,6 +342,14 @@ def _score_location(location: str | None) -> float:
     loc_lower = location.lower()
     us = is_us_location(location)
 
+    remote = "remote" in loc_lower
+    if remote:
+        # Remote is acceptable but not the goal: the candidate relocates for on-site roles.
+        if "remote" in prefs:
+            return 1.0 if us else 0.9
+        if us or not find_terms(loc_lower, ["canada", "india", "germany", "uk", "mexico", "europe"]):
+            return 0.9
+        return 0.2
     if us and any(p in US_WIDE_PREFS for p in prefs):
         return 1.0
     for pref in prefs:
@@ -348,10 +357,6 @@ def _score_location(location: str | None) -> float:
             continue
         if has_term(loc_lower, pref):
             return 1.0
-    if "remote" in loc_lower:
-        if us:
-            return 1.0 if "remote" in prefs else 0.9
-        return 0.9 if not find_terms(loc_lower, ["canada", "india", "germany", "uk", "mexico", "europe"]) else 0.2
     if us:
         return 0.6 if "hybrid" in loc_lower else 0.5
     return 0.2

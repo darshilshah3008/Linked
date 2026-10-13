@@ -65,8 +65,12 @@ class TestScoreLead:
         a = score_lead(_make_lead(title="Embedded Software Engineer", location="Sioux Falls, SD")).score
         b = score_lead(_make_lead(title="Embedded Software Engineer", location="San Jose, CA")).score
         c = score_lead(_make_lead(title="Embedded Software Engineer", location="Detroit, Michigan")).score
-        d = score_lead(_make_lead(title="Embedded Software Engineer", location="Remote, USA")).score
-        assert a == b == c == d
+        assert a == b == c
+
+    def test_onsite_us_beats_remote_when_relocating(self):
+        onsite = score_lead(_make_lead(title="Embedded Software Engineer", location="Peoria, IL")).score
+        remote = score_lead(_make_lead(title="Embedded Software Engineer", location="Remote, USA")).score
+        assert onsite > remote
 
     def test_remote_location_scores_well(self):
         lead = _make_lead(
